@@ -1,0 +1,119 @@
+---
+description: At the end of every sprint Quality Gate, auto-generate prompt-history/sprint-X.X.md by reading the conversation transcript
+alwaysApply: true
+---
+
+# Prompt History — Sprint Log Rule
+
+## When This Rule Applies
+At the end of every sprint, when:
+- The Quality Gate passes, AND
+- Sprint exit criteria are met
+
+Before marking the sprint complete or starting the next sprint task, create the sprint prompt history file.
+
+## Step-by-Step Process
+
+### 1. Locate the transcript
+The Cursor conversation transcript lives at:
+`/home/mukesh/.cursor/projects/home-mukesh-ai-practical-assessment/agent-transcripts/<uuid>/<uuid>.jsonl`
+Read the JSONL file. Each line is one message. Filter for lines where "role":"user".
+
+### 2. Filter — meaningful prompts only
+Include a user message if any are true:
+- Longer than 50 characters
+- Contains a task ID (e.g. 3.1.1, Task, Sprint)
+- Contains a role persona (You are acting as, You are a)
+- Contains a decision word (go with, defer, use, return, proceed + context)
+- Contains an architectural or design instruction
+
+Skip a message if it matches ALL of:
+- Fewer than 50 characters AND
+- Is only a continuation word: proceed, yes, no, ok, approved, done, continue
+- OR is a system/MCP injection (not the user's own words)
+
+### 3. Write prompt-history/sprint-X.X.md
+Use this exact structure:
+
+```markdown
+# Prompt History — Sprint X.X: <Sprint Title>
+
+**Date:** YYYY-MM-DD
+**Sprint:** X.X — <Title>
+**Status:** Complete
+**Tasks covered:** X.X.1 -> X.X.N
+**Traceability:** <relevant AC/DOC/FR IDs>
+
+---
+
+> **Recovery notice**
+> Prompts in this file are **verbatim** — recovered from the Cursor conversation transcript.
+> Typos in original prompts are preserved intentionally.
+> AI responses are summarized, not pasted in full.
+
+---
+
+## Goal
+<one paragraph: what this sprint aimed to deliver>
+
+## Tasks Completed
+| Task ID | Summary | Outcome |
+| ------- | ------- | ------- |
+| X.X.1   | ...     | ...     |
+
+## Prompts Log
+
+### Prompt N — <short title>
+**Time:** H:MM PM | **Task:** X.X.N
+
+**Actual prompt:**
+> <verbatim text — preserve typos>
+
+**AI output:**
+- <bullet summary of what AI produced>
+- <include file names created/changed>
+
+**What I accepted / changed:** <what developer kept, modified, or rejected>
+**What I rejected / why:** <explicit rejections, or "N/A — verified at QG">
+**Iteration needed:** Yes / No
+
+## What I did without AI assistance
+- <list developer actions taken independently>
+
+## Prompt engineering notes
+| Observation | What it shows |
+|-------------|---------------|
+| <pattern noticed> | <skill demonstrated> |
+
+## Files changed
+| File | Change |
+|------|--------|
+| `path/to/file` | Created / Updated / Deleted |
+
+## Requirements traced
+| ID | Coverage |
+|----|----------|
+| FR-C-XX | ... |
+
+## Quality Gate result
+| Check | Result |
+|-------|--------|
+| <check> | Passed / Failed |
+
+**Sprint exit:** Passed. Ready for Sprint X+1.Y.
+
+## Developer review
+**Status:** Approved
+**Approved by:** Developer — YYYY-MM-DD
+**Notes:** Prompts verbatim from Cursor transcript. Typos preserved.
+```
+
+### 4. Update prompt-history/README.md
+Add a row to the Session Index table:
+`| X.X — <Title> | [sprint-X.X.md](sprint-X.X.md) | YYYY-MM-DD | Verbatim (transcript) — Approved |`
+
+## Honesty Rule
+- Never fabricate prompts. If transcript unreadable: "Transcript unavailable — prompts reconstructed from outcomes only."
+- Never invent AI output. Summarize only what actually appeared.
+- Preserve original typos in user prompts — evidence of real input.
+- Do not create the file before Quality Gate passes.

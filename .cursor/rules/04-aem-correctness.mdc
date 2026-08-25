@@ -1,0 +1,39 @@
+---
+description: AEM/Sling API correctness rules to prevent hallucinated APIs
+globs: ["core/**/*.java", "ui.content/**", "ui.apps/**", "ui.config/**"]
+alwaysApply: false
+---
+
+# AEM Correctness Rules (prevent hallucination)
+
+## Content Fragments
+- Use: com.adobe.cq.dam.cfm.ContentFragment, FragmentTemplate,
+  com.adobe.cq.dam.cfm.ContentFragmentManager
+- Adapt: resource.adaptTo(ContentFragment.class)
+- GraphQL is READ-ONLY in AEM — NEVER use it for create/update/delete
+- CFM location: /conf/assessment/settings/dam/cfm/models
+- Ticket content: /content/dam/assessment/tickets
+- Comment content: /content/dam/assessment/comments
+
+## Resource Resolution
+- Use ResourceResolverFactory.getServiceResourceResolver(authInfo) with a system service user
+- NEVER use admin resolver / getAdministrativeResourceResolver
+- ALWAYS close ResourceResolver (try-with-resources)
+- Service user subservice name: "assessment-service"
+
+## Servlets
+- Register via property "sling.servlet.paths=/bin/api/v1/..." (NOT resourceTypes)
+- Read-only: extend SlingSafeMethodsServlet
+- Writes: extend SlingAllMethodsServlet
+- Always resp.setContentType("application/json"); set correct HTTP status
+
+## Users
+- Access via resolver.adaptTo(UserManager.class)
+- Read profile props: profile/givenName, profile/familyName, profile/email
+- Skip system users (isSystemUser())
+
+## OSGi Config
+- Place runtime configs in ui.config (org.apache.sling.serviceusermapping... for service user)
+
+## If an API is uncertain
+- State the assumption and cite the exact class/package; do NOT invent method names

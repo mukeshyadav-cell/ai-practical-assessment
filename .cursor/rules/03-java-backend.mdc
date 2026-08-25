@@ -1,0 +1,20 @@
+---
+description: Java backend coding standards (core module)
+globs: ["core/**/*.java"]
+alwaysApply: false
+---
+
+# Java Backend Rules (core module only)
+
+- Use OSGi R7 annotations: @Component, @Reference, @Designate, @ObjectClassDefinition
+- Sling Models: @Model(adaptables = ...), injection via @Inject / @ValueMapValue
+- Service injection via @Reference (field injection for OSGi components)
+- Public methods MUST have Javadoc
+- Use SLF4J: private static final Logger LOG = LoggerFactory.getLogger(X.class)
+- Validation: reject invalid records (null/blank title, invalid enum, unknown assignee)
+  and invalid transitions BEFORE persistence
+- Throw meaningful domain exceptions; never swallow exceptions silently
+- Use java.time (Instant) for timestamps; serialize as ISO-8601 in JSON
+- JSON: use Jackson (com.fasterxml.jackson) consistently — do not mix JSON libraries
+- No magic-string paths — declare constants (e.g., in a Paths util)
+- Base package for all backend code: com.mysite.core

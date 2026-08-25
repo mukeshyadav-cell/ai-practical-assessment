@@ -1,0 +1,28 @@
+---
+description: Defines how Cursor tracks the current sprint and task from implementation-plan.md
+alwaysApply: true
+---
+
+# Sprint Context Rule
+
+## Source of Truth
+`implementation-plan.md` (repo root) defines all sprints, tasks, and the CURRENT
+active sprint/task in its "Current Status" section.
+
+## At the Start of Every Task
+1. Read implementation-plan.md -> find "Current Status"
+2. Use the Active Sprint and Active Task for all prompt-log entries
+3. If the developer's prompt references a different task ID, use that and update Current Status
+
+## When a Task Completes
+1. Mark the task [x] in implementation-plan.md
+2. Update "Last Completed" and advance "Active Task"
+3. Apply the prompt-history-during-task rule (using Sprint/Task IDs from here)
+
+## When All Tasks in a Sprint Are Done (Quality Gate)
+1. Confirm build/tests/docs for the sprint pass
+2. Advance "Active Sprint" to the next sprint
+3. Trigger the prompt-history-sprint-log rule to generate prompt-history/sprint-X.X.md
+
+## If Current Status Is Ambiguous
+Ask the developer "Which sprint/task are we on?" — do NOT guess.

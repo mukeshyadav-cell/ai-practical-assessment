@@ -1,0 +1,23 @@
+---
+description: Testing rules — unit and integration, state-machine coverage
+globs: ["core/src/test/**", "it.tests/**"]
+alwaysApply: false
+---
+
+# Testing Rules
+
+## Unit Tests (core module)
+- JUnit 5 + AEM/Sling Mocks (io.wcm.testing.mock.aem / org.apache.sling.testing)
+- Mock repositories when testing services
+- State machine: cover ALL valid transitions + representative invalid ones
+
+## Integration Tests (it.tests module) — REQUIRED by exercise
+- Prove state-machine rules end-to-end:
+    - Every valid transition succeeds
+    - Invalid transitions are rejected (HTTP 409)
+- Test create/list/view/update/comment/search happy paths
+
+## Conventions
+- Behavior-named tests: shouldAllowOpenToInProgress(), shouldRejectClosedToOpen()
+- Arrange-Act-Assert structure
+- No test depends on another test's state

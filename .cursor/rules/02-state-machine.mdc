@@ -1,0 +1,30 @@
+---
+description: Ticket state machine — CRITICAL business rule, enforced in service layer
+alwaysApply: true
+---
+
+# Ticket State Machine (CRITICAL)
+
+## Statuses
+Open, In Progress, Resolved, Closed, Cancelled
+
+## Allowed Transitions (ONLY these)
+- Open          -> In Progress
+- In Progress   -> Resolved
+- Resolved      -> Closed
+- Open          -> Cancelled
+- In Progress   -> Cancelled
+
+## Enforcement Rules
+- ALL other transitions MUST be rejected (e.g., Resolved->Open, Closed->anything,
+  Cancelled->anything, Open->Resolved, skipping states)
+- Enforce in a DEDICATED class: com.mysite.core.statemachine.TicketStateMachine
+  (or TransitionValidator) — NEVER scatter transition logic across servlets
+- On invalid transition: throw com.mysite.core.exception.InvalidTransitionException
+  which the servlet maps to HTTP 409 Conflict with a clear JSON error message
+- Initial status on ticket creation is always "Open"
+
+## Testing Requirement
+- Every VALID transition must have a passing test
+- Representative INVALID transitions must have a test proving rejection
+- Name tests clearly, e.g., shouldRejectResolvedToOpenTransition()

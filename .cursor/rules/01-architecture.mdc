@@ -1,0 +1,42 @@
+---
+description: Architecture rules — Repository Pattern, DTOs, layering, swappability
+alwaysApply: true
+---
+
+# Architecture Rules
+
+## Layering (strict, top to bottom)
+UI (HTL/JS) -> Servlet (REST) -> Service (business logic) -> Repository (interface) -> CF Adapter -> Content Fragments
+
+## Repository Pattern (CRITICAL for swappability)
+- ALWAYS define an interface (Port) first, then a Content Fragment implementation (Adapter)
+- Each repository impl is an OSGi @Component with property "impl.type=contentfragment"
+- Services reference repositories via @Reference(target="(impl.type=contentfragment)")
+- Future DB adapters will use "impl.type=database" — UI/Service/Servlet MUST NOT change to switch
+
+## DTOs
+- All data crossing the repository boundary is a plain POJO DTO
+- NEVER leak ContentFragment, Resource, ResourceResolver, or JCR types above the repository layer
+- DTOs live in com.mysite.core.dto (TicketDTO, CommentDTO, UserDTO)
+
+## Relationships
+- Store relationships as text-ID fields (foreign keys), NOT AEM Content References
+  (e.g., Comment.ticketId is a String; Ticket.assignedTo is a userId String)
+- Keeps a clean migration path to a relational DB
+
+## Responsibilities
+- Servlets: thin — parse request, call service, serialize response, set HTTP status. No business logic.
+- Services: business logic, validation, state-machine enforcement, orchestration
+- Repositories: persistence only (CRUD + queries), no business rules
+
+## Package Structure (under com.mysite.core)
+- .dto
+- .repositories            (interfaces)
+- .repositories.impl       (CF adapters)
+- .services                (interfaces)
+- .services.impl
+- .servlets
+- .models                  (Sling Models)
+- .statemachine
+- .util
+- .exception               (domain exceptions)
