@@ -7,6 +7,8 @@
         "create path (sling:OrderedFolder) /content/dam/assessment/comments",
         "create service user assessment-service with path system/assessment",
         "set principal ACL for assessment-service\n    allow jcr:read,rep:write on /content/dam/assessment\n    allow jcr:read on /home/users\nend",
+        "create path (nt:unstructured) /var/assessment",
+        "set principal ACL for assessment-service\n    allow jcr:read,rep:write on /var/assessment\nend",
         "create user agent-1 with password changeme-local-dev-only",
         "set properties on authorizable(agent-1)/profile\n  set givenName to \"Agent\"\n  set familyName to \"One\"\n  set email to \"agent1@example.com\"\nend",
         "create user agent-2 with password changeme-local-dev-only",

@@ -11,10 +11,10 @@
 
 ## Current Status
 
-- **Active Sprint:** 2.1
-- **Active Task:** Quality Gate — Sprint 2.1 (all tasks 2.1.1–2.1.6 complete; pending developer review)
-- **Last Completed:** 2.1.6
-- **Next:** Sprint 3.1.1 after QG approval
+- **Active Sprint:** 5.1
+- **Active Task:** 5.1 Quality Gate — Pending developer review
+- **Last Completed:** 5.1.7 (+ QG verification)
+- **Next:** Developer review `prompt-history/sprint-5.1.md`; fix CF persistence + seed-user blockers; then Sprint 6.1
 
 ---
 
@@ -95,11 +95,11 @@ Planning docs were reconciled against this task tree. **Fixes applied:**
 
 ## Sprint 3.1 — Repository Layer (Content Fragment adapters)
 
-- [ ] 3.1.1 — `TicketRepository` CF impl (`impl.type=contentfragment`): `getAll`, `getById`, `findByStatus`, `searchByTitle` (case-insensitive)
-- [ ] 3.1.2 — `TicketRepository` CF write: `create`, `update` + `TKT-{n}` ID generation (`/var/assessment/ticket-id-counter`); **no delete**
-- [ ] 3.1.3 — `CommentRepository` CF impl: `add`, `listByTicket` + `CMT-{n}` ID generation (`/var/assessment/comment-id-counter`)
-- [ ] 3.1.4 — `UserRepository` AEM impl: `getById`, `getAll`, `search` via `UserManager` (skip system users)
-- [ ] 3.1.5 — Mappers: `com.mysite.core.util` (or `.mappers`) CF element ↔ DTO (`ticketId`→`id`, ISO-8601 text↔`Instant`)
+- [x] 3.1.1 — `TicketRepository` CF impl (`impl.type=contentfragment`): `getAll`, `getById`, `findByStatus`, `searchByTitle` (case-insensitive)
+- [x] 3.1.2 — `TicketRepository` CF write: `create`, `update` + `TKT-{n}` ID generation (`/var/assessment/ticket-id-counter`); **no delete**
+- [x] 3.1.3 — `CommentRepository` CF impl: `add`, `listByTicket` + `CMT-{n}` ID generation (`/var/assessment/comment-id-counter`)
+- [x] 3.1.4 — `UserRepository` AEM impl: `getById`, `getAll`, `search` via `UserManager` (skip system users)
+- [x] 3.1.5 — Mappers: `com.mysite.core.util` (or `.mappers`) CF element ↔ DTO (`ticketId`→`id`, ISO-8601 text↔`Instant`)
 
 **Definition of Done**
 
@@ -116,12 +116,12 @@ Planning docs were reconciled against this task tree. **Fixes applied:**
 
 ## Sprint 4.1 — State Machine + Services
 
-- [ ] 4.1.1 — `com.mysite.core.statemachine.TicketStateMachine` + `com.mysite.core.exception.InvalidTransitionException`
-- [ ] 4.1.2 — `com.mysite.core.exception` domain exceptions: validation, not-found, ticket-not-editable (maps to api-contract error codes)
-- [ ] 4.1.3 — `TicketService`: create, list (`createdAt` desc), get, update fields, reassign, `changeStatus`, search/filter (`q` + `status`)
-- [ ] 4.1.4 — `CommentService`: add comment, list by ticket (`createdAt` asc); allow on Closed/Cancelled
-- [ ] 4.1.5 — Validation: required fields, P1–P4 / status enums, known assignee, terminal-ticket edit rules (FR-7)
-- [ ] 4.1.6 — Unit tests: `TicketStateMachineTest` — all valid transitions + representative invalid (AC-22–AC-35)
+- [x] 4.1.1 — `com.mysite.core.statemachine.TicketStateMachine` + `com.mysite.core.exception.InvalidTransitionException`
+- [x] 4.1.2 — `com.mysite.core.exception` domain exceptions: validation, not-found, ticket-not-editable (maps to api-contract error codes)
+- [x] 4.1.3 — `TicketService`: create, list (`createdAt` desc), get, update fields, reassign, `changeStatus`, search/filter (`q` + `status`)
+- [x] 4.1.4 — `CommentService`: add comment, list by ticket (`createdAt` asc); allow on Closed/Cancelled
+- [x] 4.1.5 — Validation: required fields, P1–P4 / status enums, known assignee, terminal-ticket edit rules (FR-7)
+- [x] 4.1.6 — Unit tests: `TicketStateMachineTest` — all valid transitions + representative invalid (AC-22–AC-35)
 
 **Definition of Done**
 
@@ -140,13 +140,13 @@ Planning docs were reconciled against this task tree. **Fixes applied:**
 
 All servlets in `com.mysite.core.servlets`; register via `sling.servlet.paths`; JSON via Jackson.
 
-- [ ] 5.1.1 — `TicketCollectionServlet` — `GET`/`POST` `/bin/api/v1/tickets` (list with `?status=`, `?q=`; create → 201)
-- [ ] 5.1.2 — `TicketByIdServlet` — `GET`/`PUT` `/bin/api/v1/tickets/{id}` (detail; update title/description/priority only)
-- [ ] 5.1.3 — `TicketAssigneeServlet` — `PUT` `/bin/api/v1/tickets/{id}/assignee`
-- [ ] 5.1.4 — `TicketStatusServlet` — `PUT` `/bin/api/v1/tickets/{id}/status` (409 on invalid transition)
-- [ ] 5.1.5 — `CommentCollectionServlet` — `GET`/`POST` `/bin/api/v1/tickets/{id}/comments`
-- [ ] 5.1.6 — `UserCollectionServlet` — `GET` `/bin/api/v1/users` (`?q=` optional); `UserByIdServlet` — `GET` `/bin/api/v1/users/{userId}`
-- [ ] 5.1.7 — Shared error handling: JSON `{ "error", "code" }`; map 400/404/409/500 per [api-contract.md](api-contract.md)
+- [x] 5.1.1 — `TicketCollectionServlet` — `GET`/`POST` `/bin/api/v1/tickets` (list with `?status=`, `?q=`; create → 201)
+- [x] 5.1.2 — `TicketByIdServlet` — `GET`/`PUT` `/bin/api/v1/tickets/{id}` (detail; update title/description/priority only)
+- [x] 5.1.3 — `TicketAssigneeServlet` — `PUT` `/bin/api/v1/tickets/{id}/assignee`
+- [x] 5.1.4 — `TicketStatusServlet` — `PUT` `/bin/api/v1/tickets/{id}/status` (409 on invalid transition)
+- [x] 5.1.5 — `CommentCollectionServlet` — `GET`/`POST` `/bin/api/v1/tickets/{id}/comments`
+- [x] 5.1.6 — `UserCollectionServlet` — `GET` `/bin/api/v1/users` (`?q=` optional); `UserByIdServlet` — `GET` `/bin/api/v1/users/{userId}`
+- [x] 5.1.7 — Shared error handling: JSON `{ "error", "code" }`; map 400/404/409/500 per [api-contract.md](api-contract.md)
 
 **Definition of Done**
 
