@@ -2,6 +2,14 @@
     "scripts": [
         "create path (sling:OrderedFolder) /content/dam/assessment",
         "create path (nt:unstructured) /content/dam/assessment/jcr:content",
-        "set properties on /content/dam/assessment/jcr:content\n  set cq:conf{String} to /conf/assessment\n  set jcr:title{String} to \"AI Practical Assessment\"\nend"
+        "set properties on /content/dam/assessment/jcr:content\n  set cq:conf{String} to /conf/assessment\n  set jcr:title{String} to \"AI Practical Assessment\"\nend",
+        "create path (sling:OrderedFolder) /content/dam/assessment/tickets",
+        "create path (sling:OrderedFolder) /content/dam/assessment/comments",
+        "create service user assessment-service with path system/assessment",
+        "set principal ACL for assessment-service\n    allow jcr:read,rep:write on /content/dam/assessment\n    allow jcr:read on /home/users\nend",
+        "create user agent-1 with password changeme-local-dev-only",
+        "set properties on authorizable(agent-1)/profile\n  set givenName to \"Agent\"\n  set familyName to \"One\"\n  set email to \"agent1@example.com\"\nend",
+        "create user agent-2 with password changeme-local-dev-only",
+        "set properties on authorizable(agent-2)/profile\n  set givenName to \"Agent\"\n  set familyName to \"Two\"\n  set email to \"agent2@example.com\"\nend"
     ]
 }

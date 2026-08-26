@@ -11,10 +11,10 @@
 
 ## Current Status
 
-- **Active Sprint:** 1.1
-- **Active Task:** Quality Gate — Sprint 1.1 (sprint log generated; pending developer review)
-- **Last Completed:** 1.1.5
-- **Next:** Sprint 2.1.1 after QG approval — do not start until sprint log reviewed
+- **Active Sprint:** 2.1
+- **Active Task:** Quality Gate — Sprint 2.1 (all tasks 2.1.1–2.1.6 complete; pending developer review)
+- **Last Completed:** 2.1.6
+- **Next:** Sprint 3.1.1 after QG approval
 
 ---
 
@@ -72,12 +72,12 @@ Planning docs were reconciled against this task tree. **Fixes applied:**
 
 ## Sprint 2.1 — Project Scaffold & Foundation
 
-- [ ] 2.1.1 — Verify `mvn clean install` succeeds; document module map in `core/README.md` or design-notes stub
-- [ ] 2.1.2 — CFM **ticket** at `/conf/assessment/settings/dam/cfm/models/ticket` (elements: ticketId, title, description, priority, status, assignedTo, createdBy, createdAt, updatedAt)
-- [ ] 2.1.3 — CFM **comment** at `/conf/assessment/settings/dam/cfm/models/comment` (elements: commentId, ticketId, message, createdBy, createdAt)
-- [ ] 2.1.4 — Repoinit + OSGi: DAM folders `/content/dam/assessment/tickets`, `/comments`; service user `assessment-service`; seed users `agent-1`, `agent-2` (ui.config)
-- [ ] 2.1.5 — DTOs: `com.mysite.core.dto.TicketDTO`, `CommentDTO`, `UserDTO` (`Instant` timestamps, nullable `assignedTo`)
-- [ ] 2.1.6 — Repository interfaces: `com.mysite.core.repositories.TicketRepository`, `CommentRepository`, `UserRepository` (CRUD/query method signatures from data-model)
+- [x] 2.1.1 — Verify `mvn clean install` succeeds; document module map in `core/README.md` or design-notes stub
+- [x] 2.1.2 — CFM **ticket** at `/conf/assessment/settings/dam/cfm/models/ticket` (elements: ticketId, title, description, priority, status, assignedTo, createdBy, createdAt, updatedAt)
+- [x] 2.1.3 — CFM **comment** at `/conf/assessment/settings/dam/cfm/models/comment` (elements: commentId, ticketId, message, createdBy, createdAt)
+- [x] 2.1.4 — Repoinit + OSGi: DAM folders `/content/dam/assessment/tickets`, `/comments`; service user `assessment-service`; seed users `agent-1`, `agent-2` (ui.config)
+- [x] 2.1.5 — DTOs: `com.mysite.core.dto.TicketDTO`, `CommentDTO`, `UserDTO` (`Instant` timestamps, nullable `assignedTo`)
+- [x] 2.1.6 — Repository interfaces: `com.mysite.core.repositories.TicketRepository`, `CommentRepository`, `UserRepository` (CRUD/query method signatures from data-model)
 
 **Definition of Done**
 
@@ -186,26 +186,12 @@ Clientlib category: `assessment.ticketing`. Components under `/apps/assessment/c
 
 ---
 
-## Sprint 7.1 — Integration Tests
-
-Module: `it.tests` — `*IT.java` against running AEM author.
-
-- [ ] 7.1.1 — `TicketStateMachineValidTransitionsIT` — AC-22–AC-26 (valid status changes → 200)
-- [ ] 7.1.2 — `TicketStateMachineInvalidTransitionsIT` — AC-27–AC-35 (invalid → 409)
-- [ ] 7.1.3 — `TicketCrudIT` — AC-1–AC-21 (create, list, get, update, reassign, validation errors)
-- [ ] 7.1.4 — `CommentIT` — AC-41–AC-46 (add/list; Closed/Cancelled comment; empty message; 404)
-- [ ] 7.1.5 — `TicketSearchFilterIT` — AC-37–AC-40 (title search; combined filter)
-- [ ] 7.1.6 — `UserApiIT` — AC-47–AC-49; `NFR-AC-4` persistence across requests
-
-**Definition of Done**
-
-| Check | Criterion |
-|-------|-----------|
-| DOD-1 | `mvn clean verify -Plocal` passes all new `*IT.java` tests |
-| DOD-2 | Integration tests map to AC IDs in test names or class comments |
-| DOD-3 | No secrets in test configuration |
-
-**Quality Gate:** All integration tests green in `it.tests` module.
+## Sprint 7.1 — Unit Tests (Java, core module)
+- [ ] 7.1.1 — State machine unit tests: all VALID transitions succeed
+- [ ] 7.1.2 — State machine unit tests: INVALID transitions rejected (InvalidTransitionException)
+- [ ] 7.1.3 — TicketService unit tests (create defaults Open, validation, reassign, changeStatus)
+- [ ] 7.1.4 — CommentService unit tests (empty message rejected, non-existent ticket rejected)
+**Quality Gate:** All unit tests green via `mvn test`. it.tests/ui.tests remain unused.
 
 ---
 

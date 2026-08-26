@@ -1,0 +1,5 @@
+{
+    "user.mapping": [
+        "ai-practical-assessment.core:assessment-service=[assessment-service]"
+    ]
+}

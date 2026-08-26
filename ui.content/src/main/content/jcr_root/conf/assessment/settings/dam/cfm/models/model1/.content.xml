@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="cq:Template"
+    allowedPaths="[/content/entities(/.*)?]"
+    ranking="{Long}100">
+    <jcr:content
+        cq:lastModified="{Date}2026-08-26T15:17:43.923+05:30"
+        cq:lastModifiedBy="admin"
+        cq:scaffolding="/conf/assessment/settings/dam/cfm/models/model1/jcr:content/model"
+        cq:tags="[workflow:]"
+        cq:templateType="/libs/settings/dam/cfm/model-types/fragment"
+        jcr:description="This is test model to provide to AI for reference"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Model1"
+        sling:resourceSuperType="dam/cfm/models/console/components/data/entity"
+        sling:resourceType="dam/cfm/models/console/components/data/entity/default"
+        status="enabled">
+        <metadata jcr:primaryType="nt:unstructured"/>
+        <model
+            cq:targetPath="/content/entities"
+            jcr:primaryType="cq:PageContent"
+            sling:resourceType="wcm/scaffolding/components/scaffolding"
+            dataTypesConfig="/mnt/overlay/settings/dam/cfm/models/formbuilderconfig/datatypes"
+            maxGeneratedOrder="20">
+            <cq:dialog
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="cq/gui/components/authoring/dialog">
+                <content
+                    jcr:lastModified="{Date}2026-08-26T15:17:43.923+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                    <items
+                        jcr:primaryType="nt:unstructured"
+                        maxGeneratedOrder="31">
+                        <_x0031_787736863500
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            emptyText="placeholder"
+                            fieldDescription="This is single line field example in cfm"
+                            fieldLabel="Single Line Text Example With Required true"
+                            listOrder="21"
+                            maxlength="255"
+                            metaType="text-single"
+                            name="singleLineTextExampleWithRequiredTrue"
+                            renderReadOnly="false"
+                            required="on"
+                            showEmptyInReadOnly="true"
+                            validation="None"
+                            valueType="string">
+                            <granite:data jcr:primaryType="nt:unstructured"/>
+                        </_x0031_787736863500>
+                        <_x0031_787737250467
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                            fieldLabel="Single Line multifield"
+                            listOrder="24"
+                            maxlength="255"
+                            metaType="text-single"
+                            name="singleLineMultifield"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            valueType="string[]">
+                            <field
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                maxlength="255"
+                                name="singleLineMultifield"
+                                renderReadOnly="false">
+                                <granite:data jcr:primaryType="nt:unstructured"/>
+                            </field>
+                            <granite:data jcr:primaryType="nt:unstructured"/>
+                        </_x0031_787737250467>
+                        <_x0031_787737496742
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                            fieldLabel="Number field example"
+                            listOrder="27"
+                            metaType="number"
+                            name="numberFieldExample"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            step="any"
+                            valueType="double">
+                            <granite:data jcr:primaryType="nt:unstructured"/>
+                        </_x0031_787737496742>
+                        <_x0031_787737044436
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="dam/cfm/admin/components/authoring/contenteditor/multieditor"
+                            cfm-element="Multi Line Example"
+                            checked="false"
+                            default-mime-type="text/html"
+                            fieldDescription="This is multi line text example"
+                            listOrder="22"
+                            metaType="text-multi"
+                            name="multiLineExample"
+                            renderReadOnly="false"
+                            required="on"
+                            showEmptyInReadOnly="true"
+                            translatable="true"
+                            valueType="string/multiline">
+                            <granite:data jcr:primaryType="nt:unstructured"/>
+                        </_x0031_787737044436>
+                        <_x0031_787737510967
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                            checked="{Boolean}true"
+                            listOrder="28"
+                            metaType="boolean"
+                            name="booleanFieldExamles"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            text="Boolean field examles"
+                            valueType="boolean">
+                            <granite:data jcr:primaryType="nt:unstructured"/>
+                        </_x0031_787737510967>
+                        <_x0031_787737168533
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="dam/cfm/admin/components/authoring/contenteditor/cfmmultifield"
+                            cfm-element="Multiline multifields examples with plain text instead of rich text"
+                            checked="false"
+                            default-mime-type="text/plain"
+                            listOrder="23"
+                            metaType="text-multi"
+                            name="multilineMultifieldsExamplesWithPlainTextInsteadOfRichText"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            valueType="string/multiline[]">
+                            <field
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="dam/cfm/admin/components/authoring/contenteditor/multieditor"
+                                name="multilineMultifieldsExamplesWithPlainTextInsteadOfRichText"
+                                renderReadOnly="false">
+                                <granite:data jcr:primaryType="nt:unstructured"/>
+                            </field>
+                            <granite:data jcr:primaryType="nt:unstructured"/>
+                        </_x0031_787737168533>
+                        <_x0031_787737545921
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="dam/cfm/models/editor/components/fragmentreference"
+                            allowNew="{Boolean}true"
+                            fieldLabel="Fragment reference example"
+                            filter="hierarchy"
+                            fragmentmodelreference="/conf/assessment/settings/dam/cfm/models/model1"
+                            listOrder="29"
+                            metaType="fragment-reference"
+                            name="fragmentReferenceExample"
+                            nameSuffix="contentReference"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            valueType="string/content-fragment">
+                            <granite:data jcr:primaryType="nt:unstructured"/>
+                            <field jcr:primaryType="nt:unstructured"/>
+                        </_x0031_787737545921>
+                        <_x0031_787737575182
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="dam/cfm/models/editor/components/contentreference"
+                            fieldLabel="Content refernce example"
+                            filter="hierarchy"
+                            listOrder="30"
+                            metaType="reference"
+                            name="contentRefernceExample"
+                            nameSuffix="contentReference"
+                            renderReadOnly="false"
+                            rootPath="/content"
+                            showEmptyInReadOnly="true"
+                            showThumbnail="false"
+                            validation="[cfm.validation.contenttype.richtext,cfm.validation.contenttype.contentfragment,cfm.validation.contenttype.image,cfm.validation.contenttype.plaintext]"
+                            valueType="string/reference">
+                            <granite:data
+                                jcr:primaryType="nt:unstructured"
+                                thumbnail-validation="cfm.validation.thumbnail.show"/>
+                        </_x0031_787737575182>
+                        <_x0031_787737370077
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                            emptyOption="{Boolean}true"
+                            emptyText="placeholder"
+                            fieldDescription="This is dropdown examples with enumeration value"
+                            fieldLabel="Dropdown Field Example"
+                            listOrder="25"
+                            metaType="enumeration"
+                            name="dropdownFieldExample"
+                            renderReadOnly="false"
+                            required="on"
+                            showEmptyInReadOnly="true"
+                            value="Option1 value"
+                            valueType="string/enum">
+                            <granite:data jcr:primaryType="nt:unstructured"/>
+                            <optionsmultifield jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    fieldLabel="Option1"
+                                    fieldValue="Option1 value"/>
+                                <item1
+                                    jcr:primaryType="nt:unstructured"
+                                    fieldLabel="Option2"
+                                    fieldValue="Option2 value"/>
+                            </optionsmultifield>
+                            <datasource
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="dam/cfm/admin/components/datasources/optionrendererenumeration"
+                                variant="default"/>
+                        </_x0031_787737370077>
+                        <_x0031_787737628315
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="dam/cfm/admin/components/authoring/contenteditor/jsoneditor"
+                            cfm-element="Json Object Examples"
+                            listOrder="31"
+                            metaType="json"
+                            name="jsonObjectExamples"
+                            renderReadOnly="false"
+                            required="on"
+                            showEmptyInReadOnly="true"
+                            valueType="string/json"/>
+                        <_x0031_787737460344
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="dam/cfm/models/editor/components/datatypes/datepicker"
+                            displayedFormat="YYYY-MM-DD HH:mm"
+                            emptyText="YYYY-MM-DD HH:mm:ss"
+                            fieldLabel="Date Time examples"
+                            listOrder="26"
+                            metaType="date"
+                            name="dateTimeExamples"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            type="datetime"
+                            valueFormat="YYYY-MM-DD[T]HH:mm:ss.000Z"
+                            valueType="calendar/datetime">
+                            <granite:data
+                                jcr:primaryType="nt:unstructured"
+                                typeHint="Date"/>
+                        </_x0031_787737460344>
+                    </items>
+                </content>
+            </cq:dialog>
+        </model>
+    </jcr:content>
+</jcr:root>

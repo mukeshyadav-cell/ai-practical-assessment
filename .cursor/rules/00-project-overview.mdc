@@ -12,7 +12,7 @@ demonstrating responsible AI-assisted development across the full SDLC.
 ## Tech Stack (STRICT)
 - AEM as a Cloud Service SDK (AEMaaCS), archetype 57
 - Java 21 (code MUST remain Java 17 compatible — avoid Java 21-only preview features)
-- Maven multi-module: all, core, ui.apps, ui.apps.structure, ui.config, ui.content, ui.frontend, dispatcher, it.tests
+- Maven multi-module: all, core, ui.apps, ui.apps.structure, ui.config, ui.content, ui.frontend, dispatcher, it.tests (UNUSED)
 - Content Fragments for data persistence (Ticket, Comment)
 - Users seeded via AEM UserManager (JCR)
 - Sling Servlets for ALL data access (REST at /bin/api/v1/*) — NO GraphQL
@@ -42,6 +42,10 @@ Functionality:
 - User CRUD/authentication beyond AEM's built-in login
 - Sprints, dashboards, project management, notifications, attachments
 - GraphQL, external databases (design for it, do NOT implement yet)
+
+## Testing Scope
+- Only Java UNIT tests in core/src/test are in scope (state machine + services).
+- it.tests (integration) and ui.tests (Cypress E2E) are OUT OF SCOPE and remain unused.
 
 ## When Unsure
 - If you don't know an exact AEM/Sling API, SAY SO — do not invent methods

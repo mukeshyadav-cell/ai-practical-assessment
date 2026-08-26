@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[cq:contentFragment,mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="50beb118-bb90-42a0-8a1e-9823bfbe4d58">
+    <jcr:content
+        cq:name="sample-content-fragment"
+        cq:parentPath="/content/dam/assessment"
+        cq:versionCreator="admin"
+        jcr:description="This is just for reference purpose"
+        jcr:lastModified="{Date}2026-08-26T15:26:03.012+05:30"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Sample Content fragment"
+        contentFragment="{Boolean}true"
+        lastFragmentSave="{Date}2026-08-26T15:26:03.012+05:30">
+        <data
+            cq:model="/conf/assessment/settings/dam/cfm/models/model1"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                booleanFieldExamles="{Boolean}true"
+                booleanFieldExamles_x0040_LastModified="{Date}2026-08-26T15:26:02.946+05:30"
+                booleanFieldExamles_x0040_LastModifiedBy="admin"
+                contentRefernceExample="/content/dam/assessment/asset.jpg"
+                contentRefernceExample_x0040_LastModified="{Date}2026-08-26T15:26:02.955+05:30"
+                contentRefernceExample_x0040_LastModifiedBy="admin"
+                dateTimeExamples="{Date}2026-08-25T15:24:00.000+05:30"
+                dateTimeExamples_x0040_LastModified="{Date}2026-08-26T15:26:02.963+05:30"
+                dateTimeExamples_x0040_LastModifiedBy="admin"
+                dropdownFieldExample="Option2 value"
+                dropdownFieldExample_x0040_LastModified="{Date}2026-08-26T15:26:02.956+05:30"
+                dropdownFieldExample_x0040_LastModifiedBy="admin"
+                fragmentReferenceExample="/content/dam/assessment/cfm2"
+                fragmentReferenceExample_x0040_LastModified="{Date}2026-08-26T15:26:02.953+05:30"
+                fragmentReferenceExample_x0040_LastModifiedBy="admin"
+                jsonObjectExamples="\{&#xa;  &quot;key&quot;:&quot;value&quot;&#xa;}"
+                jsonObjectExamples_x0040_LastModified="{Date}2026-08-26T15:26:02.957+05:30"
+                jsonObjectExamples_x0040_LastModifiedBy="admin"
+                multiLineExample="&lt;p>This is multiline example text&lt;/p>&#xa;"
+                multiLineExample_x0040_ContentType="text/html"
+                multiLineExample_x0040_LastModified="{Date}2026-08-26T15:26:02.944+05:30"
+                multiLineExample_x0040_LastModifiedBy="admin"
+                multilineMultifieldsExamplesWithPlainTextInsteadOfRichText="[Multiline multifields1,Multiline multifields2]"
+                multilineMultifieldsExamplesWithPlainTextInsteadOfRichText_x0040_ContentType="text/plain"
+                multilineMultifieldsExamplesWithPlainTextInsteadOfRichText_x0040_LastModified="{Date}2026-08-26T15:26:02.951+05:30"
+                multilineMultifieldsExamplesWithPlainTextInsteadOfRichText_x0040_LastModifiedBy="admin"
+                numberFieldExample="{Double}5.0"
+                numberFieldExample_x0040_LastModified="{Date}2026-08-26T15:26:02.758+05:30"
+                numberFieldExample_x0040_LastModifiedBy="admin"
+                singleLineMultifield="[text1,text2]"
+                singleLineMultifield_x0040_LastModified="{Date}2026-08-26T15:26:02.755+05:30"
+                singleLineMultifield_x0040_LastModifiedBy="admin"
+                singleLineTextExampleWithRequiredTrue="Single Line Text Example With Required true input by user"
+                singleLineTextExampleWithRequiredTrue_x0040_LastModified="{Date}2026-08-26T15:26:02.750+05:30"
+                singleLineTextExampleWithRequiredTrue_x0040_LastModifiedBy="admin"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="cbd2d827-4d59-4bcf-892e-fbc728828492"
+                _x0040_string_x0040_model="/conf/assessment/settings/dam/cfm/models/model1"
+                _x0040_string_x0040_path="/content/dam/assessment/sample-content-fragment"
+                _x0040_string_x0040_uuid="50beb118-bb90-42a0-8a1e-9823bfbe4d58"
+                _x0040_stringArray_x0040_variations="[]"
+                boolean_x0040_booleanFieldExamles="{Boolean}true"
+                calendar_x0040_dateTimeExamples="{Date}2026-08-25T15:24:00.000+05:30"
+                double_x0040_numberFieldExample="{Double}5.0"
+                string_x0040_contentRefernceExample="/content/dam/assessment/asset.jpg"
+                string_x0040_dropdownFieldExample="Option2 value"
+                string_x0040_fragmentReferenceExample="/content/dam/assessment/cfm2"
+                string_x0040_jsonObjectExamples="\{&#xa;  &quot;key&quot;:&quot;value&quot;&#xa;}"
+                string_x0040_multiLineExample="&lt;p>This is multiline example text&lt;/p>&#xa;"
+                string_x0040_multiLineExample_x0040_html="&lt;p>This is multiline example text&lt;/p>&#xa;"
+                string_x0040_multiLineExample_x0040_json="\[{&quot;nodeType&quot;:&quot;paragraph&quot;,&quot;content&quot;:[{&quot;nodeType&quot;:&quot;text&quot;,&quot;value&quot;:&quot;This is multiline example text&quot;}]}]"
+                string_x0040_multiLineExample_x0040_markdown="This is multiline example text&#xa;"
+                string_x0040_multiLineExample_x0040_plaintext="This is multiline example text"
+                string_x0040_singleLineTextExampleWithRequiredTrue="Single Line Text Example With Required true input by user"
+                stringArray_x0040_multilineMultifieldsExamplesWithPlainTextInsteadOfRichText="[Multiline multifields1,Multiline multifields2]"
+                stringArray_x0040_multilineMultifieldsExamplesWithPlainTextInsteadOfRichText_x0040_html="[&lt;p>Multiline multifields1&lt;/p>,&lt;p>Multiline multifields2&lt;/p>]"
+                stringArray_x0040_multilineMultifieldsExamplesWithPlainTextInsteadOfRichText_x0040_json="[[{&quot;nodeType&quot;:&quot;paragraph&quot;\,&quot;content&quot;:[{&quot;nodeType&quot;:&quot;text&quot;\,&quot;value&quot;:&quot;Multiline multifields1&quot;}]}],[{&quot;nodeType&quot;:&quot;paragraph&quot;\,&quot;content&quot;:[{&quot;nodeType&quot;:&quot;text&quot;\,&quot;value&quot;:&quot;Multiline multifields2&quot;}]}]]"
+                stringArray_x0040_multilineMultifieldsExamplesWithPlainTextInsteadOfRichText_x0040_markdown="[Multiline multifields1&#xa;,Multiline multifields2&#xa;]"
+                stringArray_x0040_multilineMultifieldsExamplesWithPlainTextInsteadOfRichText_x0040_plaintext="[Multiline multifields1,Multiline multifields2]"
+                stringArray_x0040_singleLineMultifield="[text1,text2]"/>
+        </indexedData>
+        <metadata
+            cq:tags="[workflow:]"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>
