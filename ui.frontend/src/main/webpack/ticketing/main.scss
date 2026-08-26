@@ -1,0 +1,22 @@
+.ticket-app {
+    box-sizing: border-box;
+    max-width: 75rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.ticket-app__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.ticket-app__region {
+    margin-top: 1.5rem;
+}
+
+.is-hidden,
+[hidden] {
+    display: none !important;
+}

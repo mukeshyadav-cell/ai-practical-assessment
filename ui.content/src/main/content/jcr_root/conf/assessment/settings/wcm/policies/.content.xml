@@ -339,6 +339,15 @@
                     clientlibsJsHead="assessment.dependencies">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy>
+                <ticketing
+                    jcr:description="Includes the site and ticketing application client libraries."
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Ticketing Page"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    clientlibs="[assessment.dependencies,assessment.site,assessment.ticketing]"
+                    clientlibsJsHead="assessment.dependencies">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </ticketing>
             </page>
         </components>
     </assessment>

@@ -93,10 +93,24 @@ public class AemUserRepository implements UserRepository {
 
             List<UserDTO> users = new ArrayList<>();
             Iterator<Authorizable> authorizables =
-                    userManager.findAuthorizables("rep:principalName", "%", UserManager.SEARCH_TYPE_USER);
+                    userManager.findAuthorizables(
+                            "jcr:primaryType",
+                            "rep:User",
+                            UserManager.SEARCH_TYPE_USER);
 
             while (authorizables.hasNext()) {
                 Authorizable authorizable = authorizables.next();
+                if (authorizable.isGroup()) {
+                    continue;
+                }
+                User user = (User) authorizable;
+                String email = user.getProperty("profile/email") != null
+                        ? user.getProperty("profile/email")[0].getString()
+                        : null;
+
+                if(email == null || email.isBlank()){
+                    continue;
+                }
                 if (!isAssignableUser(authorizable)) {
                     continue;
                 }

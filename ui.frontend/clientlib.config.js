@@ -88,6 +88,24 @@ module.exports = {
           ignore: ['**/*.js', '**/*.css']
         }
       }
+    },
+    {
+      ...libsBaseConfig,
+      name: 'clientlib-ticketing',
+      categories: ['assessment.ticketing'],
+      dependencies: ['assessment.dependencies'],
+      assets: {
+        js: {
+          cwd: 'clientlib-ticketing',
+          files: ['**/*.js'],
+          flatten: false
+        },
+        css: {
+          cwd: 'clientlib-ticketing',
+          files: ['**/*.css'],
+          flatten: false
+        }
+      }
     }
   ]
 };

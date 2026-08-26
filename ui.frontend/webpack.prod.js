@@ -26,17 +26,7 @@ module.exports = merge(common, {
                     }],
                 }
             }),
-        ],
-        splitChunks: {
-            cacheGroups: {
-                main: {
-                    chunks: 'all',
-                    name: 'site',
-                    test: 'main',
-                    enforce: true
-                }
-            }
-        }
+        ]
     },
     performance: {hints: false}
 });

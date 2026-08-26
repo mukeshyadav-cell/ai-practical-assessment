@@ -11,10 +11,10 @@
 
 ## Current Status
 
-- **Active Sprint:** 5.1
-- **Active Task:** 5.1 Quality Gate — Pending developer review
-- **Last Completed:** 5.1.7 (+ QG verification)
-- **Next:** Developer review `prompt-history/sprint-5.1.md`; fix CF persistence + seed-user blockers; then Sprint 6.1
+- **Active Sprint:** 6.1
+- **Active Task:** 6.1.1 — Ticket list
+- **Last Completed:** 6.1.0 — UI scaffold
+- **Next:** Implement ticket list rendering with search and status filtering
 
 ---
 
@@ -164,12 +164,18 @@ All servlets in `com.mysite.core.servlets`; register via `sling.servlet.paths`; 
 
 ## Sprint 6.1 — UI (HTL + TypeScript)
 
-Clientlib category: `assessment.ticketing`. Components under `/apps/assessment/components`.
+Single-page (SPA-style) app on a static template. Clientlib category: `assessment.ticketing`.
+Components under `/apps/assessment/components`. TypeScript source in `ui.frontend`, compiled
+into the clientlib. App URL: `/content/assessment/us/en/tickets.html`. UI consumes the
+existing REST API only — NO backend changes.
 
-- [ ] 6.1.1 — `ticket-list` component + TS: `GET /bin/api/v1/tickets` with search (`q`) and status filter
-- [ ] 6.1.2 — `ticket-detail` component + TS: `GET /bin/api/v1/tickets/{id}` + comment list
-- [ ] 6.1.3 — `ticket-form` component + TS: create/edit; assignee from `GET /bin/api/v1/users`
-- [ ] 6.1.4 — `comment-list` / add-comment UI: `POST /bin/api/v1/tickets/{id}/comments`
+- [x] 6.1.0 — UI scaffold: static template + tickets page + clientlib (`assessment.ticketing`)
+              + component skeletons (`ticketapp`, `ticketlist`, `ticketdetail`, `ticketform`)
+              + TS entry that proves API wiring (logs ticket count) + view-switching stub (`?id=`)
+- [ ] 6.1.1 — `ticketlist` component + TS: `GET /bin/api/v1/tickets` with search (`q`) and status filter
+- [ ] 6.1.2 — `ticketdetail` component + TS: `GET /bin/api/v1/tickets/{id}` + comment list
+- [ ] 6.1.3 — `ticketform` component + TS: create/edit; assignee from `GET /bin/api/v1/users`
+- [ ] 6.1.4 — add-comment UI: `POST /bin/api/v1/tickets/{id}/comments`
 - [ ] 6.1.5 — Status change UI: `PUT /bin/api/v1/tickets/{id}/status` — only valid next statuses shown (FR-10)
 - [ ] 6.1.6 — Reassign UI: `PUT /bin/api/v1/tickets/{id}/assignee`; relative API paths only (FR-19)
 
@@ -177,6 +183,7 @@ Clientlib category: `assessment.ticketing`. Components under `/apps/assessment/c
 
 | Check | Criterion |
 |-------|-----------|
+| DOD-0 | Tickets page renders on the static template; clientlib loads; TS reaches the API (console shows ticket count); `?id=` view-switching stub works |
 | DOD-1 | End-to-end flow: list → create → detail → comment → status change → close |
 | DOD-2 | Loading, empty, and error states handled in TS fetch calls |
 | DOD-3 | User content escaped in DOM (XSS) |
