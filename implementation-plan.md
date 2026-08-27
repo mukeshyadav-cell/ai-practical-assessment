@@ -12,9 +12,9 @@
 ## Current Status
 
 - **Active Sprint:** 6.1
-- **Active Task:** 6.1.1 — Ticket list
-- **Last Completed:** 6.1.0 — UI scaffold
-- **Next:** Implement ticket list rendering with search and status filtering
+- **Active Task:** 6.1 — Quality Gate
+- **Last Completed:** 6.1.6 — Reassign UI
+- **Next:** Sprint 6.1 Quality Gate — full E2E browser verification
 
 ---
 
@@ -172,12 +172,12 @@ existing REST API only — NO backend changes.
 - [x] 6.1.0 — UI scaffold: static template + tickets page + clientlib (`assessment.ticketing`)
               + component skeletons (`ticketapp`, `ticketlist`, `ticketdetail`, `ticketform`)
               + TS entry that proves API wiring (logs ticket count) + view-switching stub (`?id=`)
-- [ ] 6.1.1 — `ticketlist` component + TS: `GET /bin/api/v1/tickets` with search (`q`) and status filter
-- [ ] 6.1.2 — `ticketdetail` component + TS: `GET /bin/api/v1/tickets/{id}` + comment list
-- [ ] 6.1.3 — `ticketform` component + TS: create/edit; assignee from `GET /bin/api/v1/users`
-- [ ] 6.1.4 — add-comment UI: `POST /bin/api/v1/tickets/{id}/comments`
-- [ ] 6.1.5 — Status change UI: `PUT /bin/api/v1/tickets/{id}/status` — only valid next statuses shown (FR-10)
-- [ ] 6.1.6 — Reassign UI: `PUT /bin/api/v1/tickets/{id}/assignee`; relative API paths only (FR-19)
+- [x] 6.1.1 — `ticketlist` component + TS: `GET /bin/api/v1/tickets` with search (`q`) and status filter
+- [x] 6.1.2 — `ticketdetail` component + TS: `GET /bin/api/v1/tickets/{id}` + comment list
+- [x] 6.1.3 — `ticketform` component + TS: create/edit; assignee from `GET /bin/api/v1/users`
+- [x] 6.1.4 — add-comment UI: `POST /bin/api/v1/tickets/{id}/comments`
+- [x] 6.1.5 — Status change UI: `PUT /bin/api/v1/tickets/{id}/status` — only valid next statuses shown (FR-10)
+- [x] 6.1.6 — Reassign UI: `PUT /bin/api/v1/tickets/{id}/assignee`; relative API paths only (FR-19)
 
 **Definition of Done**
 
