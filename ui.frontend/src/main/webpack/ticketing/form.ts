@@ -1,5 +1,4 @@
 import {
-    ApiRequestError,
     createTicket,
     fetchUsers,
     Ticket,
@@ -7,6 +6,7 @@ import {
     User
 } from './api';
 import { createElement } from './dom';
+import { queueToast, showApiErrorToast, showToast } from './toast';
 import { resolveCreatedBy } from './userContext';
 
 const PRIORITY_OPTIONS = ['P1', 'P2', 'P3', 'P4'];
@@ -306,6 +306,7 @@ async function submitTicketForm(): Promise<void> {
             });
 
             closeTicketForm();
+            queueToast(`Ticket ${ticket.id} created`, 'success');
             // Full page load so detail init runs and fetches the newly created ticket.
             const detailUrl = `${window.location.pathname}?id=${encodeURIComponent(ticket.id)}`;
             window.location.href = detailUrl;
@@ -324,16 +325,13 @@ async function submitTicketForm(): Promise<void> {
 
         const onSuccess = currentState.onSuccess;
         closeTicketForm();
+        showToast('Ticket updated', 'success');
         if (onSuccess) {
             onSuccess();
         }
     } catch (error: unknown) {
         console.error('Failed to save ticket', error);
-        if (error instanceof ApiRequestError) {
-            showFormError(error.message);
-        } else {
-            showFormError('Unable to save ticket. Please try again.');
-        }
+        showApiErrorToast(error, 'Unable to save ticket. Please try again.');
     } finally {
         if (saveButton) {
             saveButton.disabled = false;

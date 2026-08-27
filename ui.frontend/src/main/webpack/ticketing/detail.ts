@@ -1,6 +1,5 @@
 import {
     addComment,
-    ApiRequestError,
     changeStatus,
     Comment,
     fetchComments,
@@ -19,8 +18,10 @@ import {
     showPanelMessage,
     statusToModifier
 } from './dom';
+import { confirmTerminalStatusChange } from './confirm';
 import { isTerminalTicketStatus, openTicketFormEdit } from './form';
 import { getAllowedNextStatuses } from './transitions';
+import { showApiErrorToast, showToast } from './toast';
 import { resolveCreatedBy } from './userContext';
 import { getTicketIdFromUrl, navigateToTicketList } from './view';
 
@@ -167,14 +168,11 @@ function renderAddCommentForm(
                 createdBy: resolveCreatedBy()
             });
             textarea.value = '';
+            showToast('Comment added', 'success');
             await onCommentAdded();
         } catch (error: unknown) {
             console.error('Failed to add comment', error);
-            if (error instanceof ApiRequestError) {
-                showError(error.message);
-            } else {
-                showError('Unable to add comment. Please try again.');
-            }
+            showApiErrorToast(error, 'Unable to add comment. Please try again.');
         } finally {
             addButton.disabled = false;
             addButton.textContent = 'Add Comment';
@@ -263,6 +261,13 @@ function renderStatusControl(
                 return;
             }
 
+            if (isTerminalTicketStatus(newStatus)) {
+                const confirmed = await confirmTerminalStatusChange(ticket.id, newStatus);
+                if (!confirmed) {
+                    return;
+                }
+            }
+
             clearError();
             changeButton.disabled = true;
             select.disabled = true;
@@ -270,14 +275,11 @@ function renderStatusControl(
 
             try {
                 await changeStatus(ticket.id, newStatus);
+                showToast(`Status changed to ${newStatus}`, 'success');
                 onStatusChanged();
             } catch (error: unknown) {
                 console.error('Failed to change status', error);
-                if (error instanceof ApiRequestError) {
-                    showError(error.message);
-                } else {
-                    showError('Unable to change status. Please try again.');
-                }
+                showApiErrorToast(error, 'Unable to change status. Please try again.');
             } finally {
                 changeButton.disabled = false;
                 select.disabled = false;
@@ -399,14 +401,13 @@ async function renderReassignControl(
 
             try {
                 await reassignTicket(ticket.id, assignedTo);
+                const selectedUser = users.find((user) => user.userId === assignedTo);
+                const assigneeLabel = selectedUser?.displayName || assignedTo;
+                showToast(`Reassigned to ${assigneeLabel}`, 'success');
                 onReassigned();
             } catch (error: unknown) {
                 console.error('Failed to reassign ticket', error);
-                if (error instanceof ApiRequestError) {
-                    showError(error.message);
-                } else {
-                    showError('Unable to reassign ticket. Please try again.');
-                }
+                showApiErrorToast(error, 'Unable to reassign ticket. Please try again.');
             } finally {
                 reassignButton.disabled = false;
                 select.disabled = false;

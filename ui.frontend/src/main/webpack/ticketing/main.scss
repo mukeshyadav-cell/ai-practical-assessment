@@ -773,6 +773,145 @@
     color: #6c757d;
 }
 
+.ticket-toast-container {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: min(22rem, calc(100vw - 2rem));
+    pointer-events: none;
+}
+
+.ticket-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
+}
+
+.ticket-toast--success {
+    color: #0f5132;
+    background: #d1e7dd;
+    border: 1px solid #badbcc;
+}
+
+.ticket-toast--error {
+    color: #842029;
+    background: #f8d7da;
+    border: 1px solid #f5c2c7;
+}
+
+.ticket-toast__message {
+    flex: 1;
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.ticket-toast__dismiss {
+    flex-shrink: 0;
+    padding: 0;
+    font-size: 1.125rem;
+    line-height: 1;
+    color: inherit;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+.ticket-toast__dismiss:hover,
+.ticket-toast__dismiss:focus {
+    opacity: 1;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.ticket-confirm {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+}
+
+.ticket-confirm__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.ticket-confirm__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(28rem, calc(100% - 2rem));
+    margin: 12vh auto;
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.ticket-confirm__title {
+    margin: 0 0 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.ticket-confirm__message {
+    margin: 0 0 1.25rem;
+    font-size: 0.9375rem;
+    color: #495057;
+    line-height: 1.5;
+}
+
+.ticket-confirm__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.ticket-confirm__button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.ticket-confirm__button--secondary {
+    color: #495057;
+    background: #fff;
+    border-color: #ced4da;
+}
+
+.ticket-confirm__button--secondary:hover,
+.ticket-confirm__button--secondary:focus {
+    background: #f8f9fa;
+    outline: 2px solid #4a90d9;
+    outline-offset: 1px;
+}
+
+.ticket-confirm__button--primary {
+    color: #fff;
+    background: #084298;
+}
+
+.ticket-confirm__button--primary:hover,
+.ticket-confirm__button--primary:focus {
+    background: #052c65;
+    outline: 2px solid #4a90d9;
+    outline-offset: 1px;
+}
+
 .is-hidden,
 [hidden] {
     display: none !important;

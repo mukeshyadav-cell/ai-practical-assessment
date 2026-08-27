@@ -11,10 +11,10 @@
 
 ## Current Status
 
-- **Active Sprint:** 6.2
-- **Active Task:** 6.2.5
-- **Last Completed:** 6.2.4 — GET /me endpoint + createdBy wiring
-- **Next:** Sprint 6.2.5
+- **Active Sprint:** 6.2 (complete — Quality Gate passed)
+- **Active Task:** — (Sprint 7.1 not started)
+- **Last Completed:** 6.2 — Quality Gate
+- **Next:** Sprint 7.1.1 — when developer is ready
 
 ---
 
@@ -246,7 +246,7 @@ Consumes existing API; the only backend addition is the /me endpoint (6.2.4).
           ticket create and comment authorship to the authenticated user
           (fixes the createdBy TODO from 6.1.3/6.1.4).
   ```
-- [ ] 6.2.5 — Confirmation prompt for terminal transitions (Close/Cancel) + success/error
+- [x] 6.2.5 — Confirmation prompt for terminal transitions (Close/Cancel) + success/error
   ```
           toast notifications for create/update/status/reassign/comment.
   ```

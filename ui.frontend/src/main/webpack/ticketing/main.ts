@@ -2,6 +2,7 @@ import './main.scss';
 import { initTicketDetail } from './detail';
 import { initTicketForm } from './form';
 import { initTicketList } from './list';
+import { showPendingToast } from './toast';
 import { loadCurrentUser } from './userContext';
 import { getTicketIdFromUrl, switchView } from './view';
 
@@ -10,6 +11,7 @@ async function initializeTicketingUi(): Promise<void> {
     await loadCurrentUser();
     initTicketForm();
     switchView();
+    showPendingToast();
 
     if (getTicketIdFromUrl()) {
         initTicketDetail();
