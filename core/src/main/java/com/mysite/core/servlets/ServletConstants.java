@@ -14,6 +14,9 @@ public final class ServletConstants {
   /** User collection servlet path ({@code GET}). */
   public static final String USERS_PATH = API_BASE + "/users";
 
+  /** Current user servlet path ({@code GET}). */
+  public static final String ME_PATH = API_BASE + "/me";
+
   /**
    * Ticket suffix servlet base path ({@code GET}, {@code PUT}, etc. on {@code /tickets/{id}}).
    * Trailing slash enables Sling suffix routing without conflicting with {@link #TICKETS_PATH}.

@@ -384,6 +384,46 @@ See **Section 4** for full detail.
 
 ### USERS
 
+#### GET `/bin/api/v1/me` — Current AEM user
+
+| Item | Detail |
+|------|--------|
+| Description | Returns the authenticated AEM user's id and display fields for UI authorship (`createdBy`) |
+| Servlet | `com.mysite.core.servlets.CurrentUserServlet` |
+| `sling.servlet.paths` | `/bin/api/v1/me` |
+| Servlet base | `SlingSafeMethodsServlet` |
+
+**Response `200`**
+
+```json
+{
+  "userId": "agent-1",
+  "displayName": "Agent One",
+  "email": "agent1@example.com"
+}
+```
+
+When the current user is not in the seeded assignable set (e.g. `admin`), the servlet still returns **200** with a minimal body:
+
+```json
+{
+  "userId": "admin",
+  "displayName": "admin",
+  "email": ""
+}
+```
+
+**Status codes**
+
+| Code | When |
+|------|------|
+| 200 | Success (always includes `userId`) |
+| 500 | Unexpected server error |
+
+**Covers:** FR-18 (UI authorship)
+
+---
+
 #### GET `/bin/api/v1/users` — List seeded users
 
 | Item | Detail |
@@ -640,6 +680,7 @@ All error responses use:
 | POST | `/bin/api/v1/tickets/{id}/comments` | FR-13, FR-15, FR-18 | AC-41–AC-43, AC-45, AC-46 |
 | GET | `/bin/api/v1/users` | FR-16, FR-18 | AC-47 |
 | GET | `/bin/api/v1/users/{userId}` | FR-17, FR-18 | AC-48, AC-49 |
+| GET | `/bin/api/v1/me` | FR-18 | AC-51 |
 | — | Relative `/bin/api/v1` only (UI) | FR-19 | AC-51 |
 
 ### Error codes → AC / NFR
@@ -664,6 +705,7 @@ All error responses use:
 | `CommentCollectionServlet` | `/bin/api/v1/tickets/` | GET, POST (`{id}/comments` suffix) |
 | `UserCollectionServlet` | `/bin/api/v1/users` | GET |
 | `UserByIdServlet` | `/bin/api/v1/users/` | GET |
+| `CurrentUserServlet` | `/bin/api/v1/me` | GET |
 
 Suffix routing (e.g. `TKT-1001/status` vs `TKT-1001`) is implemented in servlet `doGet`/`doPost`/`doPut` by parsing the path suffix after `/bin/api/v1/tickets/`.
 

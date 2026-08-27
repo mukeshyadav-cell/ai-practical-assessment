@@ -2,6 +2,7 @@ import { fetchWithCsrf } from './csrf';
 
 const TICKETS_ENDPOINT = '/bin/api/v1/tickets';
 const USERS_ENDPOINT = '/bin/api/v1/users';
+const ME_ENDPOINT = '/bin/api/v1/me';
 
 export interface Ticket {
     id: string;
@@ -24,6 +25,12 @@ export interface Comment {
 }
 
 export interface User {
+    userId: string;
+    displayName: string;
+    email: string;
+}
+
+export interface CurrentUser {
     userId: string;
     displayName: string;
     email: string;
@@ -212,6 +219,36 @@ export async function fetchUsers(): Promise<User[]> {
     }
 
     return payload as User[];
+}
+
+/**
+ * Fetches the authenticated AEM user for UI authorship (createdBy).
+ */
+export async function fetchCurrentUser(): Promise<CurrentUser> {
+    const response = await fetch(ME_ENDPOINT, {
+        headers: {
+            Accept: 'application/json'
+        }
+    });
+
+    const payload: unknown = await parseApiResponse(response);
+    if (!payload || typeof payload !== 'object') {
+        throw new Error('Current user response was not an object');
+    }
+
+    const body = payload as Record<string, unknown>;
+    const userId = typeof body.userId === 'string' ? body.userId.trim() : '';
+    if (!userId) {
+        throw new Error('Current user response missing userId');
+    }
+
+    return {
+        userId,
+        displayName: typeof body.displayName === 'string' && body.displayName.trim()
+            ? body.displayName.trim()
+            : userId,
+        email: typeof body.email === 'string' ? body.email.trim() : ''
+    };
 }
 
 /**

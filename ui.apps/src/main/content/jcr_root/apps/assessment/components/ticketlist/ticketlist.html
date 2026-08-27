@@ -6,6 +6,18 @@
 
         <label for="ticket-status-filter">Filter by status</label>
         <select id="ticket-status-filter" name="status"></select>
+
+        <label for="ticket-priority-filter">Filter by priority</label>
+        <select id="ticket-priority-filter" name="priority"></select>
+
+        <label for="ticket-sort">Sort by</label>
+        <select id="ticket-sort" name="sort"></select>
+    </div>
+    <div class="ticket-list__meta">
+        <p id="ticket-list-summary" class="ticket-list__summary" aria-live="polite"></p>
+        <button type="button" id="ticket-list-clear-filters" class="ticket-list__clear-filters" hidden>
+            Clear filters
+        </button>
     </div>
     <div id="ticket-list-root"></div>
 </section>

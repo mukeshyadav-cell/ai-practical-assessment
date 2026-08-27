@@ -11,41 +11,49 @@
 
 ## Current Status
 
-- **Active Sprint:** 6.1
-- **Active Task:** 6.1 — Quality Gate
-- **Last Completed:** 6.1.6 — Reassign UI
-- **Next:** Sprint 6.1 Quality Gate — full E2E browser verification
+- **Active Sprint:** 6.2
+- **Active Task:** 6.2.5
+- **Last Completed:** 6.2.4 — GET /me endpoint + createdBy wiring
+- **Next:** Sprint 6.2.5
 
 ---
 
 ## Planning Artifacts Index (Sprint 1.1)
 
-| Doc | Purpose |
-|-----|---------|
+
+| Doc                                                  | Purpose                                                                |
+| ---------------------------------------------------- | ---------------------------------------------------------------------- |
 | [requirements-analysis.md](requirements-analysis.md) | Mandatory-core scope, entities, FR-1–FR-19, state machine, assumptions |
-| [acceptance-criteria.md](acceptance-criteria.md) | Testable AC-1–AC-51 + NFR-AC-1–6 in Given/When/Then format |
-| [data-model.md](data-model.md) | CFM fields, DTOs, JCR paths, TKT/CMT ID strategy, DB mapping |
-| [api-contract.md](api-contract.md) | REST endpoints, JSON shapes, error codes, servlet map |
+| [acceptance-criteria.md](acceptance-criteria.md)     | Testable AC-1–AC-51 + NFR-AC-1–6 in Given/When/Then format             |
+| [data-model.md](data-model.md)                       | CFM fields, DTOs, JCR paths, TKT/CMT ID strategy, DB mapping           |
+| [api-contract.md](api-contract.md)                   | REST endpoints, JSON shapes, error codes, servlet map                  |
+
 
 ---
+
+
 
 ## Cross-check reconciliation (1.1.5)
 
 Planning docs were reconciled against this task tree. **Fixes applied:**
 
-| Issue | Resolution |
-|-------|------------|
-| `3.1.2` mentioned ticket **delete** | Removed — ticket delete is out of scope ([requirements-analysis.md](requirements-analysis.md)) |
-| `5.1.3` separate search/filter **endpoint** | Removed — `?status=` and `?q=` are query params on `GET /bin/api/v1/tickets` ([api-contract.md](api-contract.md)) |
-| `5.1.1` lumped assignee/status into one servlet task | Split into `TicketAssigneeServlet`, `TicketStatusServlet` per api-contract sub-resources |
-| User REST endpoints missing from Sprint 5.1 | Added `UserCollectionServlet`, `UserByIdServlet` (FR-16, FR-17) |
-| CFM paths generic | Specified `/conf/assessment/settings/dam/cfm/models/ticket` and `comment` |
-| CF data paths | `/content/dam/assessment/tickets`, `/content/dam/assessment/comments` |
-| ID format | `TKT-{n}`, `CMT-{n}` counters under `/var/assessment/` ([data-model.md](data-model.md)) |
-| Priority enum | `P1`–`P4` (not Low/Medium/High/Critical) |
-| DTO JSON `id` vs CF `ticketId` | DTO field `id` maps from CF element `ticketId` |
+
+| Issue                                                | Resolution                                                                                                        |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `3.1.2` mentioned ticket **delete**                  | Removed — ticket delete is out of scope ([requirements-analysis.md](requirements-analysis.md))                    |
+| `5.1.3` separate search/filter **endpoint**          | Removed — `?status=` and `?q=` are query params on `GET /bin/api/v1/tickets` ([api-contract.md](api-contract.md)) |
+| `5.1.1` lumped assignee/status into one servlet task | Split into `TicketAssigneeServlet`, `TicketStatusServlet` per api-contract sub-resources                          |
+| User REST endpoints missing from Sprint 5.1          | Added `UserCollectionServlet`, `UserByIdServlet` (FR-16, FR-17)                                                   |
+| CFM paths generic                                    | Specified `/conf/assessment/settings/dam/cfm/models/ticket` and `comment`                                         |
+| CF data paths                                        | `/content/dam/assessment/tickets`, `/content/dam/assessment/comments`                                             |
+| ID format                                            | `TKT-{n}`, `CMT-{n}` counters under `/var/assessment/` ([data-model.md](data-model.md))                           |
+| Priority enum                                        | `P1`–`P4` (not Low/Medium/High/Critical)                                                                          |
+| DTO JSON `id` vs CF `ticketId`                       | DTO field `id` maps from CF element `ticketId`                                                                    |
+
 
 ---
+
+
 
 ## Sprint 1.1 — Planning & Analysis
 
@@ -57,18 +65,22 @@ Planning docs were reconciled against this task tree. **Fixes applied:**
 
 **Definition of Done**
 
-| Check | Criterion |
-|-------|-----------|
-| DOD-1 | All four planning docs exist at repo root and cross-reference consistently |
-| DOD-2 | Every FR-1–FR-19 has ≥1 AC in acceptance-criteria.md |
-| DOD-3 | data-model.md and api-contract.md agree on enums, paths, DTO fields |
+
+| Check | Criterion                                                                           |
+| ----- | ----------------------------------------------------------------------------------- |
+| DOD-1 | All four planning docs exist at repo root and cross-reference consistently          |
+| DOD-2 | Every FR-1–FR-19 has ≥1 AC in acceptance-criteria.md                                |
+| DOD-3 | data-model.md and api-contract.md agree on enums, paths, DTO fields                 |
 | DOD-4 | implementation-plan.md task tree matches api-contract endpoints and data-model CFMs |
-| DOD-5 | Prompts saved under `ai-prompts/planning/` for tasks 1.1.1–1.1.5 |
-| DOD-6 | No application code, CFMs, or integration tests written in Sprint 1.1 |
+| DOD-5 | Prompts saved under `ai-prompts/planning/` for tasks 1.1.1–1.1.5                    |
+| DOD-6 | No application code, CFMs, or integration tests written in Sprint 1.1               |
+
 
 **Quality Gate:** All planning docs complete, reviewed, mutually consistent → generate `prompt-history/sprint-1.1.md`.
 
 ---
+
+
 
 ## Sprint 2.1 — Project Scaffold & Foundation
 
@@ -81,17 +93,21 @@ Planning docs were reconciled against this task tree. **Fixes applied:**
 
 **Definition of Done**
 
-| Check | Criterion |
-|-------|-----------|
-| DOD-1 | `mvn clean install` passes; package deploys to local AEM SDK |
-| DOD-2 | Ticket + Comment CFMs visible in AEM CF model console |
-| DOD-3 | DAM folders exist; `cq:conf` points to `/conf/assessment` |
+
+| Check | Criterion                                                                |
+| ----- | ------------------------------------------------------------------------ |
+| DOD-1 | `mvn clean install` passes; package deploys to local AEM SDK             |
+| DOD-2 | Ticket + Comment CFMs visible in AEM CF model console                    |
+| DOD-3 | DAM folders exist; `cq:conf` points to `/conf/assessment`                |
 | DOD-4 | Service user mapping active; bundle `core` is **Active** in OSGi console |
-| DOD-5 | DTO + repository interface classes compile in `core` module |
+| DOD-5 | DTO + repository interface classes compile in `core` module              |
+
 
 **Quality Gate:** Project builds, deploys to local SDK, bundle is Active.
 
 ---
+
+
 
 ## Sprint 3.1 — Repository Layer (Content Fragment adapters)
 
@@ -103,16 +119,20 @@ Planning docs were reconciled against this task tree. **Fixes applied:**
 
 **Definition of Done**
 
-| Check | Criterion |
-|-------|-----------|
+
+| Check | Criterion                                                                                          |
+| ----- | -------------------------------------------------------------------------------------------------- |
 | DOD-1 | Create ticket CF at `/content/dam/assessment/tickets/TKT-1001` via repository harness or unit test |
-| DOD-2 | Read back ticket + add comment CF at `/content/dam/assessment/comments/CMT-1001` |
-| DOD-3 | No `ContentFragment`/`Resource` types leak above repository layer |
-| DOD-4 | Service user resolver used (not administrative resolver) |
+| DOD-2 | Read back ticket + add comment CF at `/content/dam/assessment/comments/CMT-1001`                   |
+| DOD-3 | No `ContentFragment`/`Resource` types leak above repository layer                                  |
+| DOD-4 | Service user resolver used (not administrative resolver)                                           |
+
 
 **Quality Gate:** Can create and read a Ticket + Comment via a test/harness.
 
 ---
+
+
 
 ## Sprint 4.1 — State Machine + Services
 
@@ -125,16 +145,20 @@ Planning docs were reconciled against this task tree. **Fixes applied:**
 
 **Definition of Done**
 
-| Check | Criterion |
-|-------|-----------|
-| DOD-1 | Every valid transition has a passing unit test |
-| DOD-2 | Representative invalid transitions rejected in unit tests |
-| DOD-3 | `TicketService.changeStatus` delegates to `TicketStateMachine` only |
+
+| Check | Criterion                                                            |
+| ----- | -------------------------------------------------------------------- |
+| DOD-1 | Every valid transition has a passing unit test                       |
+| DOD-2 | Representative invalid transitions rejected in unit tests            |
+| DOD-3 | `TicketService.changeStatus` delegates to `TicketStateMachine` only  |
 | DOD-4 | Validation runs before persistence for create/update/reassign/status |
+
 
 **Quality Gate:** State-machine unit tests pass (valid + invalid transitions).
 
 ---
+
+
 
 ## Sprint 5.1 — REST API (Servlets)
 
@@ -150,17 +174,21 @@ All servlets in `com.mysite.core.servlets`; register via `sling.servlet.paths`; 
 
 **Definition of Done**
 
-| Check | Criterion |
-|-------|-----------|
-| DOD-1 | All ten api-contract endpoints respond via curl/Postman |
-| DOD-2 | Create ticket → 201; create comment → 201 |
+
+| Check | Criterion                                                                        |
+| ----- | -------------------------------------------------------------------------------- |
+| DOD-1 | All ten api-contract endpoints respond via curl/Postman                          |
+| DOD-2 | Create ticket → 201; create comment → 201                                        |
 | DOD-3 | Invalid transition → 409 `INVALID_TRANSITION`; unknown user → 400 `UNKNOWN_USER` |
-| DOD-4 | Terminal ticket update/reassign → 400 `TICKET_NOT_EDITABLE` |
-| DOD-5 | Every servlet sets `Content-Type: application/json` |
+| DOD-4 | Terminal ticket update/reassign → 400 `TICKET_NOT_EDITABLE`                      |
+| DOD-5 | Every servlet sets `Content-Type: application/json`                              |
+
 
 **Quality Gate:** All endpoints verified via Postman/curl.
 
 ---
+
+
 
 ## Sprint 6.1 — UI (HTL + TypeScript)
 
@@ -170,8 +198,10 @@ into the clientlib. App URL: `/content/assessment/us/en/tickets.html`. UI consum
 existing REST API only — NO backend changes.
 
 - [x] 6.1.0 — UI scaffold: static template + tickets page + clientlib (`assessment.ticketing`)
-              + component skeletons (`ticketapp`, `ticketlist`, `ticketdetail`, `ticketform`)
-              + TS entry that proves API wiring (logs ticket count) + view-switching stub (`?id=`)
+  ```
+          + component skeletons (`ticketapp`, `ticketlist`, `ticketdetail`, `ticketform`)
+          + TS entry that proves API wiring (logs ticket count) + view-switching stub (`?id=`)
+  ```
 - [x] 6.1.1 — `ticketlist` component + TS: `GET /bin/api/v1/tickets` with search (`q`) and status filter
 - [x] 6.1.2 — `ticketdetail` component + TS: `GET /bin/api/v1/tickets/{id}` + comment list
 - [x] 6.1.3 — `ticketform` component + TS: create/edit; assignee from `GET /bin/api/v1/users`
@@ -181,26 +211,76 @@ existing REST API only — NO backend changes.
 
 **Definition of Done**
 
-| Check | Criterion |
-|-------|-----------|
+
+| Check | Criterion                                                                                                                                       |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | DOD-0 | Tickets page renders on the static template; clientlib loads; TS reaches the API (console shows ticket count); `?id=` view-switching stub works |
-| DOD-1 | End-to-end flow: list → create → detail → comment → status change → close |
-| DOD-2 | Loading, empty, and error states handled in TS fetch calls |
-| DOD-3 | User content escaped in DOM (XSS) |
-| DOD-4 | No hardcoded hostnames or secrets in clientlibs |
+| DOD-1 | End-to-end flow: list → create → detail → comment → status change → close                                                                       |
+| DOD-2 | Loading, empty, and error states handled in TS fetch calls                                                                                      |
+| DOD-3 | User content escaped in DOM (XSS)                                                                                                               |
+| DOD-4 | No hardcoded hostnames or secrets in clientlibs                                                                                                 |
+
 
 **Quality Gate:** Full user flow works end-to-end in the browser.
 
 ---
 
+
+
+## Sprint 6.2 — UI Enhancements (Optional Stretch)
+
+Enhancements to the working UI. Sorting is CLIENT-SIDE (no backend change) except where noted.
+Consumes existing API; the only backend addition is the /me endpoint (6.2.4).
+
+- [x] 6.2.1 — Sort tickets (client-side): dropdown with Newest, Oldest, Recently Updated,
+  ```
+          Priority (P1→P4), Ticket ID. Combines with existing filter + search.
+  ```
+- [x] 6.2.2 — Result summary ("Showing N tickets") + ensure filter + search + sort all
+  ```
+          work together correctly (combined state).
+  ```
+- [x] 6.2.3 — Priority filter (mirror the status filter): All, P1, P2, P3, P4.
+- [x] 6.2.4 — GET /bin/api/v1/me endpoint (returns current AEM user) + wire createdBy for
+  ```
+          ticket create and comment authorship to the authenticated user
+          (fixes the createdBy TODO from 6.1.3/6.1.4).
+  ```
+- [ ] 6.2.5 — Confirmation prompt for terminal transitions (Close/Cancel) + success/error
+  ```
+          toast notifications for create/update/status/reassign/comment.
+  ```
+
+**Definition of Done**
+
+
+| Check | Criterion                                                               |
+| ----- | ----------------------------------------------------------------------- |
+| DOD-1 | Sorting works for all options and combines with filter + search         |
+| DOD-2 | Result count accurate; combined filter/search/sort state is consistent  |
+| DOD-3 | createdBy (ticket + comment) reflects the logged-in AEM user via /me    |
+| DOD-4 | Terminal transitions require confirmation; toasts show success/error    |
+| DOD-5 | No regressions to existing Sprint 6.1 features (full flow still passes) |
+
+
+**Quality Gate:** Enhancements work; no regressions; full end-to-end flow still passes.
+
+---
+
+
+
 ## Sprint 7.1 — Unit Tests (Java, core module)
+
 - [ ] 7.1.1 — State machine unit tests: all VALID transitions succeed
 - [ ] 7.1.2 — State machine unit tests: INVALID transitions rejected (InvalidTransitionException)
 - [ ] 7.1.3 — TicketService unit tests (create defaults Open, validation, reassign, changeStatus)
 - [ ] 7.1.4 — CommentService unit tests (empty message rejected, non-existent ticket rejected)
+
 **Quality Gate:** All unit tests green via `mvn test`. it.tests/ui.tests remain unused.
 
 ---
+
+
 
 ## Sprint 8.1 — Documentation & Reflection
 
@@ -212,72 +292,88 @@ existing REST API only — NO backend changes.
 
 **Definition of Done**
 
-| Check | Criterion |
-|-------|-----------|
+
+| Check | Criterion                                                             |
+| ----- | --------------------------------------------------------------------- |
 | DOD-1 | All lifecycle artifacts listed above exist with date + purpose header |
-| DOD-2 | README setup verified from scratch on clean SDK install |
-| DOD-3 | `prompt-history/README.md` index updated for all sprints |
+| DOD-2 | README setup verified from scratch on clean SDK install               |
+| DOD-3 | `prompt-history/README.md` index updated for all sprints              |
+
 
 **Quality Gate:** All lifecycle artifacts complete; README setup verified from scratch.
 
 ---
 
+
+
 ## Traceability — Sprint → FR / AC
 
-| Sprint | Delivers (FR) | Key AC / NFR coverage |
-|--------|---------------|------------------------|
-| **1.1** | Planning baseline for FR-1–FR-19 | All AC-1–AC-51 defined; NFR-AC-1–6 |
-| **2.1** | Foundation for FR-18 (structure) | CFMs/DTOs enable all FRs |
-| **3.1** | Persistence for FR-1–FR-17 data | NFR-AC-4 (CF persistence path) |
+
+| Sprint  | Delivers (FR)                                       | Key AC / NFR coverage                          |
+| ------- | --------------------------------------------------- | ---------------------------------------------- |
+| **1.1** | Planning baseline for FR-1–FR-19                    | All AC-1–AC-51 defined; NFR-AC-1–6             |
+| **2.1** | Foundation for FR-18 (structure)                    | CFMs/DTOs enable all FRs                       |
+| **3.1** | Persistence for FR-1–FR-17 data                     | NFR-AC-4 (CF persistence path)                 |
 | **4.1** | FR-1–FR-17 business logic; FR-8–FR-10 state machine | AC-22–AC-36 (unit level); validation AC-3–AC-6 |
-| **5.1** | FR-1–FR-18 REST exposure | AC-1–AC-50; NFR-AC-1, NFR-AC-2, NFR-AC-5 |
-| **6.1** | FR-10 UI transitions; FR-19 UI API usage | AC-36, AC-51 |
-| **7.1** | Verification of all FRs via HTTP | AC-1–AC-51; NFR-AC-1–6 |
-| **8.1** | Documentation & process traceability | Sprint logs; lifecycle artifacts |
+| **5.1** | FR-1–FR-18 REST exposure                            | AC-1–AC-50; NFR-AC-1, NFR-AC-2, NFR-AC-5       |
+| **6.1** | FR-10 UI transitions; FR-19 UI API usage            | AC-36, AC-51                                   |
+| **7.1** | Verification of all FRs via HTTP                    | AC-1–AC-51; NFR-AC-1–6                         |
+| **8.1** | Documentation & process traceability                | Sprint logs; lifecycle artifacts               |
+
+
+
 
 ### FR delivery by implementation sprint
 
-| FR | Primary sprint(s) | Verification |
-|----|-------------------|--------------|
-| FR-1 | 4.1, 5.1 | AC-1–AC-6; 7.1.3 |
-| FR-2 | 4.1, 5.1 | AC-7, AC-8; 7.1.3 |
-| FR-3 | 4.1, 5.1 | AC-9, AC-10; 7.1.3 |
-| FR-4 | 4.1, 5.1 | AC-11, AC-12; 7.1.5 |
-| FR-5 | 4.1, 5.1 | AC-13–AC-15; 7.1.3 |
-| FR-6 | 4.1, 5.1 | AC-18, AC-19; 7.1.3 |
-| FR-7 | 4.1, 5.1 | AC-16, AC-17, AC-20, AC-21; 7.1.3 |
-| FR-8 | 4.1, 5.1 | AC-22–AC-26; 7.1.1 |
-| FR-9 | 4.1, 5.1 | AC-27–AC-35; 7.1.2 |
-| FR-10 | 4.1, 5.1, 6.1 | AC-36; 6.1.5 |
-| FR-11 | 4.1, 5.1 | AC-37–AC-39; 7.1.5 |
-| FR-12 | 4.1, 5.1 | AC-40; 7.1.5 |
-| FR-13 | 4.1, 5.1 | AC-41–AC-43; 7.1.4 |
-| FR-14 | 4.1, 5.1 | AC-44; 7.1.4 |
-| FR-15 | 4.1, 5.1 | AC-45, AC-46; 7.1.4 |
-| FR-16 | 3.1, 4.1, 5.1 | AC-47; 7.1.6 |
-| FR-17 | 3.1, 4.1, 5.1 | AC-48, AC-49; 7.1.6 |
-| FR-18 | 5.1 | AC-50; all `*IT.java` |
-| FR-19 | 6.1 | AC-51; code review 8.1.2 |
+
+| FR    | Primary sprint(s) | Verification                      |
+| ----- | ----------------- | --------------------------------- |
+| FR-1  | 4.1, 5.1          | AC-1–AC-6; 7.1.3                  |
+| FR-2  | 4.1, 5.1          | AC-7, AC-8; 7.1.3                 |
+| FR-3  | 4.1, 5.1          | AC-9, AC-10; 7.1.3                |
+| FR-4  | 4.1, 5.1          | AC-11, AC-12; 7.1.5               |
+| FR-5  | 4.1, 5.1          | AC-13–AC-15; 7.1.3                |
+| FR-6  | 4.1, 5.1          | AC-18, AC-19; 7.1.3               |
+| FR-7  | 4.1, 5.1          | AC-16, AC-17, AC-20, AC-21; 7.1.3 |
+| FR-8  | 4.1, 5.1          | AC-22–AC-26; 7.1.1                |
+| FR-9  | 4.1, 5.1          | AC-27–AC-35; 7.1.2                |
+| FR-10 | 4.1, 5.1, 6.1     | AC-36; 6.1.5                      |
+| FR-11 | 4.1, 5.1          | AC-37–AC-39; 7.1.5                |
+| FR-12 | 4.1, 5.1          | AC-40; 7.1.5                      |
+| FR-13 | 4.1, 5.1          | AC-41–AC-43; 7.1.4                |
+| FR-14 | 4.1, 5.1          | AC-44; 7.1.4                      |
+| FR-15 | 4.1, 5.1          | AC-45, AC-46; 7.1.4               |
+| FR-16 | 3.1, 4.1, 5.1     | AC-47; 7.1.6                      |
+| FR-17 | 3.1, 4.1, 5.1     | AC-48, AC-49; 7.1.6               |
+| FR-18 | 5.1               | AC-50; all `*IT.java`             |
+| FR-19 | 6.1               | AC-51; code review 8.1.2          |
+
 
 ---
+
+
 
 ## Sprint Numbering
 
 - Use X.1 per phase (1.1, 2.1, …). Split to X.2 only if a phase genuinely grows.
 - Each sprint ends with a Quality Gate + generated `prompt-history/sprint-X.X.md`.
 
+
+
 ## Namespace Reminder
 
-| Layer | Location |
-|-------|----------|
-| Java code | `com.mysite.core.*` (`core` module) |
-| Servlets | `com.mysite.core.servlets` |
-| DTOs | `com.mysite.core.dto` |
-| Repositories | `com.mysite.core.repositories` / `.repositories.impl` |
-| CFM models | `/conf/assessment/settings/dam/cfm/models` |
-| Ticket CFs | `/content/dam/assessment/tickets/{ticketId}` |
-| Comment CFs | `/content/dam/assessment/comments/{commentId}` |
-| HTL / clientlibs | `/apps/assessment` |
-| OSGi config | `ui.config` → `/apps/assessment/osgiconfig` |
+
+| Layer            | Location                                              |
+| ---------------- | ----------------------------------------------------- |
+| Java code        | `com.mysite.core.*` (`core` module)                   |
+| Servlets         | `com.mysite.core.servlets`                            |
+| DTOs             | `com.mysite.core.dto`                                 |
+| Repositories     | `com.mysite.core.repositories` / `.repositories.impl` |
+| CFM models       | `/conf/assessment/settings/dam/cfm/models`            |
+| Ticket CFs       | `/content/dam/assessment/tickets/{ticketId}`          |
+| Comment CFs      | `/content/dam/assessment/comments/{commentId}`        |
+| HTL / clientlibs | `/apps/assessment`                                    |
+| OSGi config      | `ui.config` → `/apps/assessment/osgiconfig`           |
+
 
 Never mix Java package names with JCR content paths.

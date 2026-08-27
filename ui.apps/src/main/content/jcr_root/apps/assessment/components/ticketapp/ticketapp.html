@@ -3,6 +3,7 @@
     <sly data-sly-call="${clientlib.js @ categories='assessment.ticketing'}"/>
 </sly>
 <div class="ticket-app" id="ticket-app-root">
+    <p id="ticket-current-user" class="ticket-app__current-user" aria-live="polite"></p>
     <sly data-sly-resource="${'ticketlist'}"></sly>
     <sly data-sly-resource="${'ticketdetail'}"></sly>
     <sly data-sly-resource="${'ticketform'}"></sly>
