@@ -1,0 +1,27 @@
+---
+description: Documentation and lifecycle-artifact rules for the AI capability exercise
+alwaysApply: true
+---
+
+# Documentation Rules
+
+## After Every Meaningful Task
+- Remind the developer to save the prompt + response summary into ai-prompts/<category>/
+  Categories: planning, design, implementation, testing, debugging, code-review, documentation
+- When a design decision is made, note what to record in design-notes.md
+
+## Required Lifecycle Artifacts (create when their sprint reaches them)
+README.md, candidate-info.md, tool-workflow.md, requirements-analysis.md,
+acceptance-criteria.md, implementation-plan.md, design-notes.md, api-contract.md,
+data-model.md, ui-flow.md, test-strategy.md, debugging-notes.md,
+code-review-notes.md, pr-description.md, reflection.md, final-ai-usage-summary.md
+
+## Standards
+- Every doc: title, date, and a one-line purpose at top
+- Docs are AI-assisted but MUST be reviewed/corrected by the developer
+- Never commit secrets in any doc
+- Prefer tables and numbered items (FR-1, AC-1) for traceability
+
+## Prompt History
+- Follow prompt-history-during-task and prompt-history-sprint-log rules
+- sprint-X.X.md files are generated at Quality Gate ONLY

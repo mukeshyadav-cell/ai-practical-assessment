@@ -131,9 +131,14 @@ class TicketStateMachineTest {
     }
 
     @Test
-    @DisplayName("AC-35: Cancelled -> In Progress is rejected")
     void shouldRejectCancelledToInProgress() {
         assertInvalidTransition(TicketStatus.CANCELLED, TicketStatus.IN_PROGRESS);
+    }
+
+    @Test
+    @DisplayName("AC-35: Cancelled -> Resolved is rejected")
+    void shouldRejectCancelledToResolved() {
+        assertInvalidTransition(TicketStatus.CANCELLED, TicketStatus.RESOLVED);
     }
 
     @ParameterizedTest(name = "invalid transition {0} -> {1}")
@@ -185,6 +190,35 @@ class TicketStateMachineTest {
         assertEquals(Set.of(), stateMachine.allowedNextStatuses(TicketStatus.CANCELLED));
     }
 
+    @Test
+    void shouldReturnEmptyNextStatusesForNullStatus() {
+        assertEquals(Set.of(), stateMachine.allowedNextStatuses((TicketStatus) null));
+    }
+
+    @Test
+    void shouldReturnCorrectNextStatusesForOpenLabel() {
+        assertEquals(
+                EnumSet.of(TicketStatus.IN_PROGRESS, TicketStatus.CANCELLED),
+                stateMachine.allowedNextStatuses("Open"));
+    }
+
+    // --- Null status handling ---
+
+    @Test
+    void shouldRejectNullStatusInCanTransition() {
+        assertFalse(stateMachine.canTransition((TicketStatus) null, TicketStatus.OPEN));
+        assertFalse(stateMachine.canTransition(TicketStatus.OPEN, (TicketStatus) null));
+        assertFalse(stateMachine.canTransition((TicketStatus) null, (TicketStatus) null));
+    }
+
+    @Test
+    void shouldRejectNullStatusInAssertCanTransition() {
+        assertThrows(IllegalArgumentException.class,
+                () -> stateMachine.assertCanTransition((TicketStatus) null, TicketStatus.OPEN));
+        assertThrows(IllegalArgumentException.class,
+                () -> stateMachine.assertCanTransition(TicketStatus.OPEN, (TicketStatus) null));
+    }
+
     // --- Exception content ---
 
     @Test
@@ -215,6 +249,32 @@ class TicketStateMachineTest {
     @Test
     void shouldMapLabelsToEnumCorrectly() {
         assertEquals(TicketStatus.IN_PROGRESS, TicketStatus.fromLabel("In Progress"));
+    }
+
+    @Test
+    void shouldAllowValidTransitionViaLabels() {
+        assertTrue(stateMachine.canTransition("Open", "In Progress"));
+        assertDoesNotThrow(() -> stateMachine.assertCanTransition("Open", "In Progress"));
+    }
+
+    @Test
+    void shouldRejectInvalidTransitionViaLabels() {
+        InvalidTransitionException ex = assertThrows(
+                InvalidTransitionException.class,
+                () -> stateMachine.assertCanTransition("Open", "Closed"));
+
+        assertEquals(TicketStatus.OPEN, ex.getFrom());
+        assertEquals(TicketStatus.CLOSED, ex.getTo());
+        assertEquals("INVALID_TRANSITION", ex.errorCode());
+    }
+
+    @Test
+    void shouldValidateStatusLabels() {
+        assertTrue(TicketStatus.isValidLabel("Open"));
+        assertTrue(TicketStatus.isValidLabel("In Progress"));
+        assertFalse(TicketStatus.isValidLabel(null));
+        assertFalse(TicketStatus.isValidLabel(""));
+        assertFalse(TicketStatus.isValidLabel("NotARealStatus"));
     }
 
     // --- Method sources ---

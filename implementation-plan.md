@@ -11,10 +11,10 @@
 
 ## Current Status
 
-- **Active Sprint:** 6.2 (complete — Quality Gate passed)
-- **Active Task:** — (Sprint 7.1 not started)
-- **Last Completed:** 6.2 — Quality Gate
-- **Next:** Sprint 7.1.1 — when developer is ready
+- **Active Sprint:** — (all sprints complete)
+- **Active Task:** —
+- **Last Completed:** 8.1 — Quality Gate passed (Documentation & Reflection)
+- **Project status:** **Complete** — ready for submission (see `SUBMISSION-CHECKLIST.md`)
 
 ---
 
@@ -271,10 +271,10 @@ Consumes existing API; the only backend addition is the /me endpoint (6.2.4).
 
 ## Sprint 7.1 — Unit Tests (Java, core module)
 
-- [ ] 7.1.1 — State machine unit tests: all VALID transitions succeed
-- [ ] 7.1.2 — State machine unit tests: INVALID transitions rejected (InvalidTransitionException)
-- [ ] 7.1.3 — TicketService unit tests (create defaults Open, validation, reassign, changeStatus)
-- [ ] 7.1.4 — CommentService unit tests (empty message rejected, non-existent ticket rejected)
+- [x] 7.1.1 — State machine unit tests: all VALID transitions succeed
+- [x] 7.1.2 — State machine unit tests: INVALID transitions rejected (InvalidTransitionException)
+- [x] 7.1.3 — TicketService unit tests (create defaults Open, validation, reassign, changeStatus)
+- [x] 7.1.4 — CommentService unit tests (empty message rejected, non-existent ticket rejected)
 
 **Quality Gate:** All unit tests green via `mvn test`. it.tests/ui.tests remain unused.
 
@@ -284,11 +284,11 @@ Consumes existing API; the only backend addition is the /me endpoint (6.2.4).
 
 ## Sprint 8.1 — Documentation & Reflection
 
-- [ ] 8.1.1 — [design-notes.md](design-notes.md), [ui-flow.md](ui-flow.md), [test-strategy.md](test-strategy.md), [debugging-notes.md](debugging-notes.md)
-- [ ] 8.1.2 — [code-review-notes.md](code-review-notes.md), [pr-description.md](pr-description.md)
-- [ ] 8.1.3 — [README.md](README.md) (project setup), [candidate-info.md](candidate-info.md), [tool-workflow.md](tool-workflow.md)
-- [ ] 8.1.4 — [reflection.md](reflection.md), [final-ai-usage-summary.md](final-ai-usage-summary.md)
-- [ ] 8.1.5 — Consolidate `ai-prompts/` folders; verify prompt-history index
+- [x] 8.1.1 — [design-notes.md](design-notes.md), [ui-flow.md](ui-flow.md), [test-strategy.md](test-strategy.md), [debugging-notes.md](debugging-notes.md)
+- [x] 8.1.2 — [code-review-notes.md](code-review-notes.md), [pr-description.md](pr-description.md)
+- [x] 8.1.3 — [README.md](README.md) (project setup), [candidate-info.md](candidate-info.md), [tool-workflow.md](tool-workflow.md)
+- [x] 8.1.4 — [reflection.md](reflection.md), [final-ai-usage-summary.md](final-ai-usage-summary.md)
+- [x] 8.1.5 — Consolidate `ai-prompts/` folders; verify prompt-history index; `SUBMISSION-CHECKLIST.md`
 
 **Definition of Done**
 
@@ -300,7 +300,7 @@ Consumes existing API; the only backend addition is the /me endpoint (6.2.4).
 | DOD-3 | `prompt-history/README.md` index updated for all sprints              |
 
 
-**Quality Gate:** All lifecycle artifacts complete; README setup verified from scratch.
+**Quality Gate:** Passed 2026-08-27 — all lifecycle artifacts complete; `prompt-history/sprint-8.1.md` generated. README clean-SDK verification: developer attested at QG (see `SUBMISSION-CHECKLIST.md` pre-submit actions).
 
 ---
 

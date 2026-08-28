@@ -14,7 +14,11 @@ Prompts are verbatim from the Cursor transcript; AI responses are summarized.
 | 5.1 — REST API (Servlets) | [sprint-5.1.md](sprint-5.1.md) | 2026-08-26 | Verbatim (transcript) — Pending review |
 | 6.1 — UI (HTL + TypeScript) | [sprint-6.1.md](sprint-6.1.md) | 2026-08-27 | Verbatim (transcript) — Pending review |
 | 6.2 — UI Enhancements | [sprint-6.2.md](sprint-6.2.md) | 2026-08-27 | Verbatim (transcript) — Approved |
+| 7.1 — Unit Tests | [sprint-7.1.md](sprint-7.1.md) | 2026-08-27 | Verbatim (transcript) — Pending review |
+| 8.1 — Documentation & Reflection | [sprint-8.1.md](sprint-8.1.md) | 2026-08-27 | Verbatim (transcript) — Approved |
 
 ## Notes
-- Files are created ONLY at each sprint's Quality Gate (see prompt-history-sprint-log rule).
+
+- Files are created ONLY at each sprint's Quality Gate (see `prompt-history-sprint-log.mdc`).
 - Prompts are verbatim (typos preserved); AI responses are summarized, not pasted in full.
+- **Sprint 8.1** is the final sprint — project documentation and reflection complete.

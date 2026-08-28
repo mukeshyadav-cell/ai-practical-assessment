@@ -1,0 +1,55 @@
+---
+description: After every completed task, remind developer about prompt logging, flag if meaningful, and capture a response summary
+alwaysApply: true
+---
+
+# Prompt History — During-Task Reminder
+
+## When This Rule Applies
+After every task completion, when Cursor stops and requests developer review.
+
+## What To Do
+At the end of every task summary (after changes, decisions, and security/performance notes),
+append the following prompt log notice:
+
+```
+---
+> **Prompt log:** This prompt will be captured in the sprint log when the Quality Gate passes.
+> Meaningful: [Yes / No — reason]
+> Response summary: [One sentence — the concrete artifact or decision the AI produced this turn]
+---
+```
+
+Set **Meaningful: Yes** if the prompt that triggered this task:
+- Contains a task instruction or task ID
+- Makes an architectural or design decision
+- Iterates on a previous AI output with feedback
+- Rejects or modifies AI-generated content
+- Contains a role persona ("You are acting as...")
+- Is longer than one sentence with specific direction
+
+Set **Meaningful: No** if the prompt was:
+- A single continuation word only (proceed, yes, ok, approved)
+- A status check with no new instruction
+- An acknowledgement with no decision
+
+**Response summary rules:**
+- One factual sentence, past tense (e.g., "Generated TicketRepository interface with 6 methods")
+- Name the concrete artifact; if Meaningful is No, write "N/A — no substantive output"
+
+## Sprint Boundary Reminder
+When a sprint Quality Gate passes, add before closing the sprint:
+
+```
+---
+> **Sprint log:** Now creating prompt-history/sprint-X.X.md from this session's transcript.
+> Following the prompt-history-sprint-log rule.
+---
+```
+
+Then immediately apply the prompt-history-sprint-log rule.
+
+## What NOT To Do
+- Do not create the sprint log file mid-sprint — only at Quality Gate
+- Do not ask the developer to manually copy prompts — Cursor reads the transcript
+- Do not include this notice in the sprint log file itself (it is a reminder only)

@@ -1,0 +1,41 @@
+---
+description: Testing rules — Java unit tests only (state machine + services), no E2E
+globs: ["core/src/test/**"]
+alwaysApply: false
+---
+
+# Testing Rules (Unit Tests Only)
+
+## Scope Decision
+- Java UNIT tests in core/src/test: IN SCOPE
+- Integration tests (it.tests module): OUT OF SCOPE — do not use
+- E2E tests (ui.tests / Cypress): OUT OF SCOPE — do not write Cypress specs
+- The it.tests and ui.tests modules remain generated but UNUSED
+
+## Framework
+- JUnit 5 (Jupiter)
+- Sling/AEM Mocks (io.wcm.testing.mock.aem / org.apache.sling.testing) only where needed
+- Mock repositories when testing services (test business logic in isolation)
+
+## Required Coverage — State Machine (highest priority)
+- Location: core/src/test/java/com/mysite/core/statemachine
+- Every VALID transition succeeds:
+    Open->In Progress, In Progress->Resolved, Resolved->Closed,
+    Open->Cancelled, In Progress->Cancelled
+- Representative INVALID transitions are rejected (throw InvalidTransitionException):
+    Open->Resolved, Open->Closed, In Progress->Closed, Resolved->Open,
+    Resolved->In Progress, Closed->*, Cancelled->*
+
+## Service-Layer Unit Tests
+- TicketService: create defaults status=Open, validation rejects blank title/invalid enum,
+  reassign rejects unknown user, changeStatus delegates to state machine
+- CommentService: rejects empty message, rejects comment on non-existent ticket
+
+## Conventions
+- Behavior-named tests: shouldAllowOpenToInProgress(), shouldRejectResolvedToOpen()
+- Arrange-Act-Assert; no test depends on another test's state
+- Run with: mvn test
+
+## Do NOT
+- Do NOT scaffold or edit it.tests or ui.tests
+- Do NOT add Cypress specs or E2E dependencies

@@ -1,130 +1,182 @@
-# Design Notes — AEM Support Ticket Management System
+# Design Notes — Architecture & Design Decisions
 
-**Date:** 2025-08-26  
-**Purpose:** Architecture decisions, module layout, and implementation guidance for the assessment project.
+**Date:** 2026-08-27  
+**Purpose:** Record the architecture, key design decisions (with trade-offs), package layout, and known limitations for the AEM Support Ticket Management System.
 
-**Sprint/Task:** 2.1 / 2.1.1
+**Sprint/Task:** 8.1 / 8.1.1
 
 ---
 
-## Build Verification (Task 2.1.1)
+## Overview
 
-| Check | Result |
-|-------|--------|
-| Command | `mvn clean install` |
-| Status | **SUCCESS** (verified locally by developer) |
-| Archetype | AEM Project Archetype 57 (AEMaaCS) |
-| AEM SDK API | `2026.8.27673.20260811T193135Z-260700` (parent `pom.xml`) |
+The AEM Support Ticket Management System is a full-stack ticketing application on **AEM as a Cloud Service** (archetype 57). It supports create → triage → resolve → close workflows for support tickets with comments, assignee management, keyword search, and status filtering.
 
-Full reactor build includes `core`, `ui.frontend`, `ui.apps`, `ui.apps.structure`, `ui.config`, `ui.content`, `all`, `dispatcher`, `it.tests`, and `ui.tests` modules. Only in-scope modules contribute application artifacts; see Testing Scope below.
+**Persistence:** Ticket and Comment entities are stored as **Content Fragments** under `/content/dam/assessment`. Users are **not** CF-backed — they are seeded AEM authorizables resolved via `UserManager`.
+
+**API:** All data access is exposed through **Sling Servlets** at `/bin/api/v1/*` (JSON via Jackson). The UI is a **single-page (SPA-style)** TypeScript app compiled into clientlib `assessment.ticketing`.
+
+**Layering (strict, top to bottom):**
+
+```
+UI (HTL + TypeScript clientlib)
+  → Servlet (REST, thin)
+    → Service (business logic, validation, state machine)
+      → Repository (interface / port)
+        → CF adapter (impl.type=contentfragment)
+          → Content Fragments (JCR/DAM)
+```
+
+Users are read through `UserRepository` → `AemUserRepository` (`impl.type=aem`) → AEM `UserManager`.
+
+---
+
+## Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Browser: /content/assessment/us/en/tickets.html  (?id= for detail view)    │
+│  HTL: ticketapp → ticketlist | ticketdetail | ticketform                    │
+│  TS clientlib: assessment.ticketing (ui.frontend → ui.apps)                │
+└───────────────────────────────────┬─────────────────────────────────────────┘
+                                    │ fetch /bin/api/v1/*  (relative paths)
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SERVLET LAYER  com.mysite.core.servlets                                  │
+│  TicketCollection, TicketById, TicketAssignee, TicketStatus,                │
+│  CommentCollection, UserCollection, UserById, CurrentUser (/me)             │
+│  + RoutingFilters for /{id}, /{id}/status, /{id}/assignee, /{id}/comments │
+│  ServletResponseUtil: Jackson JSON + DomainException → HTTP status          │
+└───────────────────────────────────┬─────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SERVICE LAYER  com.mysite.core.services.impl                               │
+│  TicketServiceImpl — create, list, update, reassign, changeStatus, search   │
+│  CommentServiceImpl — addComment, listComments                              │
+│  TicketStateMachine (pure POJO, new'd in service)                            │
+│  TicketValidator / CommentValidator                                           │
+└───────────────────────────────────┬─────────────────────────────────────────┘
+                                    │ DTOs only (TicketDTO, CommentDTO, UserDTO)
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  REPOSITORY PORTS  com.mysite.core.repositories                             │
+│  TicketRepository | CommentRepository | UserRepository  (interfaces)        │
+└───────────────┬─────────────────────────────┬───────────────────────────────┘
+                │                             │
+                ▼                             ▼
+┌───────────────────────────────┐  ┌──────────────────────────────────────────┐
+│  impl.type=contentfragment    │  │  impl.type=aem                           │
+│  ContentFragmentTicketRepository│  │  AemUserRepository                       │
+│  ContentFragmentCommentRepository│ │  (UserManager + service resolver)        │
+└───────────────┬───────────────┘  └──────────────────────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  JCR / DAM                                                                   │
+│  CFs: /content/dam/assessment/tickets/{ticketId}                            │
+│       /content/dam/assessment/comments/{commentId}                          │
+│  IDs: /var/assessment/ticket-id-counter, comment-id-counter                 │
+│  CF models: /conf/assessment/settings/dam/cfm/models/ticket|comment           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Future swap (designed, not implemented):
+  @Reference(target="(impl.type=database)") TicketRepository dbRepo;
+  → JDBC/JPA adapter; UI + servlets unchanged
+```
+
+**OSGi wiring:** Services inject repositories with `@Reference(target = "(impl.type=contentfragment)")` (tickets/comments) or `"(impl.type=aem)"` (users). CF repositories use service user `assessment-service` via `ResourceResolverFactory.getServiceResourceResolver()`.
+
+---
+
+## Key Design Decisions (with Trade-offs)
+
+| Decision | Choice | Rationale | Trade-off |
+|----------|--------|-----------|-----------|
+| **Repository Pattern (Port/Adapter)** | Interface in `.repositories`; CF impl in `.repositories.impl` with `impl.type=contentfragment` | Mandatory-core requirement for future DB migration; services depend on ports only | Extra boilerplate (interfaces, mappers, OSGi targets) vs direct CF access in servlets |
+| **Sling Servlets (not GraphQL)** | REST at `/bin/api/v1/*`; **no GraphQL** | Full CRUD + custom business rules (state machine, terminal-ticket edits) need explicit write endpoints; servlets map cleanly to service methods; GraphQL on AEM CF is primarily **read-oriented** and would still need custom mutations for status/assignee | More servlet classes and routing glue than a single GraphQL schema; manual api-contract maintenance |
+| **Content Fragments + text-ID FKs** | Tickets/comments as CFs; `ticketId`, `assignedTo`, `createdBy` stored as **plain strings** | Native AEMaaCS headless storage for learning scope; text IDs mirror relational FKs for future DB adapter | CF write API is verbose; no referential integrity at JCR level; search/filter limited vs SQL |
+| **State machine as pure domain logic** | `TicketStateMachine` — no AEM/Sling/JCR imports; `new TicketStateMachine()` in `TicketServiceImpl` | Fast, deterministic unit tests (62 tests, no mocks); single source of truth for transitions | UI duplicates transition map in `transitions.ts` (must stay in sync); enforcement only guaranteed server-side |
+| **`changeStatus` as sole enforcement path** | Status changes only via `TicketService.changeStatus()` → `stateMachine.assertCanTransition()`; **not** via `PUT /tickets/{id}` body | Prevents bypassing the state machine through field updates; clear audit trail | Three ticket mutation endpoints instead of one generic PATCH |
+| **Dedicated `/status` and `/assignee` sub-resources** | `PUT /tickets/{id}/status`, `PUT /tickets/{id}/assignee` separate from `PUT /tickets/{id}` (title/description/priority only) | Matches api-contract; explicit intent per operation; easier servlet authorization/logging later | More endpoints than a consolidated update API |
+| **Comments on terminal tickets** | `Closed`/`Cancelled`: reject field update, reassign, status change (**FR-7**); **allow** add comment (**FR-13**, AC-42/AC-43) | Supports post-resolution discussion without reopening or editing closed records | Asymmetric rules — developers must remember comments are the only mutation on terminal tickets |
+| **Client-side priority/sort vs server-side status/search** | **Server:** `?status=`, `?q=` (title search) on `GET /tickets`. **Client (6.2):** priority filter, sort (5 options), result count on fetched array | Status/search reduce payload early; sort/priority added as UI polish without backend sprint | Priority filter only applies to **already-fetched** tickets; combined filters can disagree with server if list grows large; no `?priority=` server param yet |
+| **`GET /me` for `createdBy`** | `CurrentUserServlet` at `/bin/api/v1/me`; UI calls before create/comment | Fixes hardcoded `agent-1` TODO; uses authenticated AEM session user | Extra round-trip on page load; servlet trusts AEM login (no custom auth layer) |
+| **Domain exception hierarchy → HTTP** | Abstract `DomainException` with `errorCode()` + `httpStatus()`; `ServletResponseUtil.handleException()` | Consistent JSON `{"error","code"}` per api-contract; servlets stay thin | Must keep exception catalog in sync with api-contract manually |
+
+### Servlet routing note
+
+The api-contract documents suffix-style paths (`/bin/api/v1/tickets/` + suffix). On the **local AEM SDK**, pure suffix servlet registration **failed** (`suffix=null`, HTML 404). Implementation uses **Sling `RoutingFilter`** classes (`TicketByIdRoutingFilter`, `TicketStatusRoutingFilter`, etc.) to dispatch sub-paths reliably. Trade-off: filters add code but behave consistently on local SDK and author.
+
+### Jackson / `Instant` serialization
+
+`ServletResponseUtil` registers `JavaTimeModule` and disables `WRITE_DATES_AS_TIMESTAMPS` so DTO `Instant` fields serialize as ISO-8601 strings in JSON. This was built into the first servlet task (5.1.1), not retrofitted after a production bug.
+
+---
+
+## Package Structure (`com.mysite.core.*`)
+
+| Package | Responsibility | Key types |
+|---------|----------------|-----------|
+| `.dto` | Boundary POJOs | `TicketDTO`, `CommentDTO`, `UserDTO` |
+| `.repositories` | Persistence ports | `TicketRepository`, `CommentRepository`, `UserRepository` |
+| `.repositories.impl` | Adapters | `ContentFragmentTicketRepository`, `ContentFragmentCommentRepository`, `AemUserRepository` |
+| `.mappers` | CF element ↔ DTO | `TicketMapper`, `CommentMapper` |
+| `.services` / `.services.impl` | Business logic | `TicketService`, `TicketServiceImpl`, `CommentService`, `CommentServiceImpl` |
+| `.statemachine` | Lifecycle rules | `TicketStatus`, `TicketStateMachine` |
+| `.validation` | Input rules | `TicketValidator`, `CommentValidator` |
+| `.exception` | Domain errors | `DomainException`, `InvalidTransitionException`, `ValidationException`, `TicketNotFoundException`, `TicketNotEditableException`, `UnknownUserException` |
+| `.servlets` | REST adapters | `*Servlet`, `*RoutingFilter`, `ServletConstants`, `util.ServletResponseUtil` |
+| `.util` | Shared helpers | `TimeUtil` (ISO-8601 ↔ `Instant`) |
+| `.models` | Sling Models | Archetype `HelloWorldModel` (unused; not removed) |
+
+No `ContentFragment`, `Resource`, or `ResourceResolver` types appear above the repository layer.
 
 ---
 
 ## Module Map
 
-Maven multi-module layout for **com.mysite** / **assessment** namespace. Artifact paths align with [data-model.md](data-model.md) and [api-contract.md](api-contract.md).
+| Module | In scope? | Holds |
+|--------|-----------|-------|
+| **core** | Yes | OSGi bundle — all Java above |
+| **ui.apps** | Yes | HTL components (`ticketapp`, `ticketlist`, `ticketdetail`, `ticketform`), clientlibs |
+| **ui.apps.structure** | Yes | Allowed JCR roots |
+| **ui.config** | Yes | Repoinit, service-user mapping, OSGi configs |
+| **ui.content** | Yes | CFM definitions, site page `/content/assessment/us/en/tickets`, DAM scaffolding |
+| **ui.frontend** | Yes | TypeScript/Webpack → `assessment.ticketing` clientlib |
+| **all** | Yes | Container package for local/Cloud Manager deploy |
+| **dispatcher** | Yes | AEMaaCS dispatcher config (validated locally; not required for author-only FRs) |
+| **it.tests** | **No** | Archetype placeholder — unused |
+| **ui.tests** | **No** | Cypress placeholder — unused |
 
-| Module | In scope? | Purpose (this project) | Where artifacts live |
-|--------|-----------|------------------------|----------------------|
-| **all** | Yes | Container / deployment package — bundles `core` OSGi jar and all FileVault content packages (`ui.apps`, `ui.config`, `ui.content`, etc.) into a single installable package for local SDK and Cloud Manager. | `all/target/*.zip` → installs to AEM author/publish |
-| **core** | Yes | Java OSGi bundle: `com.mysite.core` — DTOs, repository interfaces + CF adapters, services, state machine, domain exceptions, REST servlets, Sling Models, mappers. | See **core package map** below |
-| **ui.apps** | Yes | HTL components, dialogs, and clientlibs under `/apps/assessment`. | `/apps/assessment/components/*` (e.g. `ticket-list`, `ticket-detail`, `ticket-form`, `comment-list` — Sprint 6.1); `/apps/assessment/clientlibs/*` (category `assessment.ticketing`) |
-| **ui.apps.structure** | Yes | Repository structure package — declares allowed JCR roots before code packages deploy (empty content, filter definitions only). | Filter roots: `/apps/assessment`, `/content/dam/assessment`, overlay roots — `ui.apps.structure/pom.xml` |
-| **ui.config** | Yes | Runmode OSGi configurations (repoinit, service-user mapping, logging, CORS). | `/apps/assessment/osgiconfig/config*` — e.g. `RepositoryInitializer~assessment`, `ServiceUserMapper` (Sprint 2.1.4) |
-| **ui.content** | Yes | Mutable content: CFM definitions, DAM folder scaffolding, site/templates. | CFMs: `/conf/assessment/settings/dam/cfm/models/ticket`, `comment` (Sprint 2.1.2–2.1.3); DAM data folders: `/content/dam/assessment/tickets`, `/content/dam/assessment/comments`; site: `/content/assessment` |
-| **ui.frontend** | Yes | TypeScript/Webpack build pipeline; compiles TS/SCSS and copies output into `ui.apps` clientlibs via `clientlib.config.js`. | Source: `ui.frontend/src/main/webpack/`; output → `ui.apps/.../apps/assessment/clientlibs/` |
-| **dispatcher** | Yes | AEM as a Cloud Service dispatcher configuration (caching, filters, farms). Validated locally with Dispatcher SDK. | `dispatcher/src/` — not required for mandatory-core FRs on local author-only dev |
-| **it.tests** | **No** | AEM integration tests (HTTP clients against running author). Present from archetype; **unused** for this assessment. | `it.tests/src/main/java` — do not implement |
-| **ui.tests** | **No** | Cypress E2E UI tests. Present from archetype; **unused** for this assessment. | `ui.tests/` — do not implement |
+**REST surface (implemented):**
 
-### core package map (`core/src/main/java/com/mysite/core/`)
-
-| Package | Planned artifacts | JCR / API tie-in |
-|---------|-------------------|------------------|
-| `.dto` | `TicketDTO`, `CommentDTO`, `UserDTO` | JSON shapes in [api-contract.md](api-contract.md); `id` maps from CF `ticketId` / `commentId` |
-| `.repositories` | `TicketRepository`, `CommentRepository`, `UserRepository` (interfaces) | Persistence contract per [data-model.md](data-model.md) |
-| `.repositories.impl` | CF adapters (`impl.type=contentfragment`) | Read/write CFs at `/content/dam/assessment/tickets/{ticketId}`, `/content/dam/assessment/comments/{commentId}` |
-| `.services` / `.services.impl` | `TicketService`, `CommentService` | Business logic, validation, state-machine orchestration |
-| `.statemachine` | `TicketStateMachine` | Enforces transitions per [requirements-analysis.md](requirements-analysis.md) §4 |
-| `.exception` | `InvalidTransitionException`, validation/not-found exceptions | Maps to HTTP 400/404/409 per api-contract error catalog |
-| `.servlets` | `TicketCollectionServlet`, `TicketByIdServlet`, `TicketAssigneeServlet`, `TicketStatusServlet`, `CommentCollectionServlet`, `UserCollectionServlet`, `UserByIdServlet` | `sling.servlet.paths` under `/bin/api/v1/*` |
-| `.util` (or `.mappers`) | CF element ↔ DTO mappers | ISO-8601 text ↔ `java.time.Instant` |
-| `.models` | Sling Models for HTL (if needed) | Component data binding in Sprint 6.1 |
-
-**Application metadata (repository layer):** ID counters at `/var/assessment/ticket-id-counter`, `/var/assessment/comment-id-counter` (Sprint 3.1).
-
-**Users:** Not CF-backed — resolved via `UserManager`; seeded users `agent-1`, `agent-2` via repoinit in `ui.config` (Sprint 2.1.4).
-
-### REST surface (servlets → services)
-
-All browser/integration access via `/bin/api/v1` only ([api-contract.md](api-contract.md)):
-
-| Path | Servlet (planned) |
-|------|-------------------|
-| `GET/POST /bin/api/v1/tickets` | `TicketCollectionServlet` |
-| `GET/PUT /bin/api/v1/tickets/{id}` | `TicketByIdServlet` |
-| `PUT /bin/api/v1/tickets/{id}/assignee` | `TicketAssigneeServlet` |
-| `PUT /bin/api/v1/tickets/{id}/status` | `TicketStatusServlet` |
-| `GET/POST /bin/api/v1/tickets/{id}/comments` | `CommentCollectionServlet` |
-| `GET /bin/api/v1/users` | `UserCollectionServlet` |
-| `GET /bin/api/v1/users/{userId}` | `UserByIdServlet` |
+| Method | Path | Servlet |
+|--------|------|---------|
+| GET, POST | `/bin/api/v1/tickets` | `TicketCollectionServlet` |
+| GET, PUT | `/bin/api/v1/tickets/{id}` | `TicketByIdServlet` (+ filter) |
+| PUT | `/bin/api/v1/tickets/{id}/assignee` | `TicketAssigneeServlet` (+ filter) |
+| PUT | `/bin/api/v1/tickets/{id}/status` | `TicketStatusServlet` (+ filter) |
+| GET, POST | `/bin/api/v1/tickets/{id}/comments` | `CommentCollectionServlet` (+ filter) |
+| GET | `/bin/api/v1/users` | `UserCollectionServlet` |
+| GET | `/bin/api/v1/users/{userId}` | `UserByIdServlet` (+ filter) |
+| GET | `/bin/api/v1/me` | `CurrentUserServlet` |
 
 ---
 
-## Testing Scope
+## Known Limitations & Future Improvements
 
-| Layer | Module / path | Used? | Notes |
-|-------|---------------|-------|-------|
-| Java unit tests | `core/src/test/java` | **Yes** | State machine (`TicketStateMachineTest`), service validation, servlet unit tests where appropriate |
-| Integration tests | `it.tests` | **No** | Out of scope — archetype placeholder only; Sprint 7.1 tasks in implementation plan are **not** executed |
-| UI E2E (Cypress) | `ui.tests` | **No** | Out of scope — Cypress not used |
-
-**Policy:** Only `mvn test` (core module unit tests) is part of the assessment test strategy. `it.tests` and `ui.tests` remain in the reactor for archetype compatibility but are not developed or relied upon.
-
----
-
-## Build & Run
-
-| Action | Command |
-|--------|---------|
-| Full build | `mvn clean install` |
-| Build + deploy to local SDK author | `mvn clean install -PautoInstallSinglePackage` |
-| Run unit tests only | `mvn test` |
-| Build frontend only | `cd ui.frontend && npm run build` |
-| Validate dispatcher config | `cd dispatcher && ./bin/validate.sh src` |
-
-### Java version
-
-| Topic | Value |
-|-------|-------|
-| Cloud Manager / local target | **Java 21** (`.cloudmanager/java-version`) |
-| Source compatibility | **Java 17** — code must not use Java 21-only preview features ([requirements-analysis.md](requirements-analysis.md)) |
-| Maven compiler `release` | `11` in parent `pom.xml` (archetype default; aligns with Java 17+ bytecode) |
-
-Local AEM SDK author defaults: `localhost:4502` (`aem.host` / `aem.port` in parent POM).
-
----
-
-## Archetype Sample Code — Keep / Remove
-
-Archetype 57 ships demo classes and matching tests/components. **Do not delete in Task 2.1.1** — track for replacement in later sprints.
-
-| Class / artifact | Location | Action | Reason |
-|------------------|----------|--------|--------|
-| `HelloWorldModel` | `core/.../models/HelloWorldModel.java` | **Remove** (later) | Archetype demo Sling Model; replaced by ticketing Sling Models if needed (Sprint 6.1) |
-| `HelloWorldModelTest` | `core/src/test/.../HelloWorldModelTest.java` | **Remove** (later) | Test for removed demo model |
-| `SimpleServlet` | `core/.../servlets/SimpleServlet.java` | **Remove** (later) | Demo servlet (`resourceTypes` binding); replaced by `/bin/api/v1/*` servlets per [api-contract.md](api-contract.md) (Sprint 5.1) |
-| `SimpleServletTest` | `core/src/test/.../SimpleServletTest.java` | **Remove** (later) | Test for removed demo servlet |
-| `SimpleScheduledTask` | `core/.../schedulers/SimpleScheduledTask.java` | **Remove** (later) | Archetype scheduler sample; no scheduled jobs in mandatory core |
-| `SimpleScheduledTaskTest` | `core/src/test/.../SimpleScheduledTaskTest.java` | **Remove** (later) | Test for removed scheduler |
-| `LoggingFilter` | `core/.../filters/LoggingFilter.java` | **Remove** (later) | Archetype request filter demo; not required for ticketing API |
-| `LoggingFilterTest` | `core/src/test/.../LoggingFilterTest.java` | **Remove** (later) | Test for removed filter |
-| `SimpleResourceListener` | `core/.../listeners/SimpleResourceListener.java` | **Remove** (later) | Archetype JCR listener demo; persistence via repository layer, not listeners |
-| `SimpleResourceListenerTest` | `core/src/test/.../SimpleResourceListenerTest.java` | **Remove** (later) | Test for removed listener |
-| `helloworld` component | `ui.apps/.../components/helloworld/` | **Remove** (later) | Archetype HTL demo; replaced by `ticket-list`, `ticket-detail`, etc. |
-| `_helloworld.js` / `_helloworld.scss` | `ui.frontend/src/main/webpack/components/` | **Remove** (later) | Frontend assets for demo component |
-
-**Keep (for now):** `AppAemContext` test utility (`core/src/test/.../testcontext/AppAemContext.java`) — reuse for unit tests until replaced.
+| Area | Current state | Improvement |
+|------|---------------|-------------|
+| **ID generation** | `TKT-{n}` / `CMT-{n}` via JCR property counter at `/var/assessment/*-counter`; **not atomic** under concurrency (documented in repository Javadoc) | Oak counter API or DB sequences with locking |
+| **DB adapter** | Designed (`impl.type=database`) but **not implemented** | JDBC/JPA repository impl; same DTOs and service layer |
+| **Server-side priority filter** | Priority filtered **client-side** only (Sprint 6.2) | Add `?priority=` query param to `GET /tickets` and repository `findByPriority` |
+| **Pagination** | Full ticket list returned (assumption A-2) | Cursor/offset pagination on list endpoint |
+| **Ticket delete** | Out of scope | Soft-delete flag if required later |
+| **Integration / E2E tests** | `it.tests`, `ui.tests` unused | Cloud Manager custom functional/UI testing |
+| **Archetype demo code** | `HelloWorldModel`, `SimpleServlet`, etc. still present | Remove when no longer needed for archetype reference |
+| **Suffix servlet vs filter** | api-contract describes suffix registration; runtime uses routing filters on local SDK | Align contract doc with filter implementation or verify suffix works on Cloud Service |
+| **Search scope** | Title-only, case-insensitive (`searchByTitle`) | Extend to description or full-text index |
+| **AuthZ** | AEM login + CSRF on mutating requests; no per-ticket RBAC | Role-based assignee/transition rules if needed |
 
 ---
 
@@ -132,8 +184,10 @@ Archetype 57 ships demo classes and matching tests/components. **Do not delete i
 
 | Artifact | Sprint |
 |----------|--------|
-| Module map (this section) | 2.1.1 |
-| CFM definitions | 2.1.2, 2.1.3 |
-| Repoinit + OSGi | 2.1.4 |
-| DTOs | 2.1.5 |
-| Repository interfaces | 2.1.6 |
+| Architecture baseline | 1.1 (`requirements-analysis.md`, `api-contract.md`, `data-model.md`) |
+| Module map (initial) | 2.1.1 |
+| Repository + state machine | 3.1, 4.1 |
+| REST API | 5.1 |
+| UI + `/me` | 6.1, 6.2 |
+| Unit tests | 7.1 |
+| This document (expanded) | 8.1.1 |
